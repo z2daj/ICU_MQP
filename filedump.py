@@ -7,22 +7,41 @@
 
 import os
 import subprocess
+import re
 
 #setup some variables
 currDir = os.getcwd()
 gsIP = '1.4.19.107' #needs to be updated to actual GS IP, probably of the 192.168.1.x variety
-droneIP = '1.4.19.115' #needs to be updated to actual drone IP, probably of the 192.168.1.x variety, and in a list of several drones
+droneIP = 'www.google.com'#'1.4.19.115' #needs to be updated to actual drone IP, probably of the 192.168.1.x variety, and in a list of several drones
+regex = '([0-9./])'
 
 #ping the bastard and see if it's available
 p = subprocess.Popen(['ping', '-c', '3', droneIP], stdout=subprocess.PIPE)
-output = p.communicate()
-print output
+stdoutput,stderror = p.communicate()
+#output = re.split('\n+', stdoutput)
+
 rc = p.returncode
+
 if rc == 0:
     print('%s active' % droneIP)
 
-    #grab average ping
-    print output.splitlines()[4]
+    #grab average ping - on the second to last line every time out of 9 line output (7)
+    avgPingStr = stdoutput.splitlines()[7]
+
+    #perform regex to capture min/avg/max/std-dev ping statistics
+    reStr = re.findall(regex, avgPingStr)
+    reStr = ''.join(reStr)
+
+    #separate out each entry dilimited by '/' character
+    reStr = reStr.split('/')
+
+    #grab the average ping result in ms
+    avgPingStr = reStr[4]
+    avgPing = float(avgPingStr)
+
+    if avgPing <= 250:
+        #begin rsync here
+        print avgPing
 
 
 elif rc == 2:
