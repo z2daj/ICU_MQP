@@ -10,13 +10,14 @@ camera = picamera.PiCamera()
 imgDir = '/home/pi/Python/images'
 cwd = os.getcwd()
 
-#capture images to a specfied output path with the timestamp as the filename
+
+#capture images to a specified output path with the timestamp as the filename
 def captureImage(outputPath):
     if os.path.exists(outputPath):
         os.chdir(outputPath)
-        timestr = time.strftime("%Y%m%d-%H%M%S")
-        camera.capture(timestr + '.jpg')
-        print "Image captured with filename: " + timestr + ".jpg"
+        timeStr = time.strftime("%Y%m%d-%H%M%S")
+        camera.capture(timeStr + '.jpg')
+        print "Image captured with filename: " + timeStr + ".jpg"
 
     else:
         print "Output path: " + outputPath + "doesn't exist."

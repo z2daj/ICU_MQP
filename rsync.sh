@@ -5,5 +5,5 @@
 
 spawn rsync -avz pi@1.4.19.115:~/Python/images ~/Desktop
 expect "pi@1.4.19.115's password:"
-send "raspberry"
+send "raspberry\n"
 interact
