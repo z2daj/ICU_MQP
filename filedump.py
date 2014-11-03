@@ -12,18 +12,17 @@ import re
 #setup some variables
 currDir = os.getcwd()
 gsIP = '1.4.19.107' #needs to be updated to actual GS IP, probably of the 192.168.1.x variety
-droneIP = 'www.google.com'#'1.4.19.115' #needs to be updated to actual drone IP, probably of the 192.168.1.x variety, and in a list of several drones
+droneIP = '1.4.19.115' #needs to be updated to actual drone IP, probably of the 192.168.1.x variety, and in a list of several drones
 regex = '([0-9./])'
 
-#ping the bastard and see if it's available
+#ping the bastard to see if it's available, and grab the command output
+print 'Pinging Drone1...'
 p = subprocess.Popen(['ping', '-c', '3', droneIP], stdout=subprocess.PIPE)
 stdoutput,stderror = p.communicate()
-#output = re.split('\n+', stdoutput)
-
 rc = p.returncode
 
 if rc == 0:
-    print('%s active' % droneIP)
+    print('Drone1 with IP: %s is active' % droneIP)
 
     #grab average ping - on the second to last line every time out of 9 line output (7)
     avgPingStr = stdoutput.splitlines()[7]
@@ -32,7 +31,7 @@ if rc == 0:
     reStr = re.findall(regex, avgPingStr)
     reStr = ''.join(reStr)
 
-    #separate out each entry dilimited by '/' character
+    #separate out each entry delimited by '/' character
     reStr = reStr.split('/')
 
     #grab the average ping result in ms
@@ -40,13 +39,16 @@ if rc == 0:
     avgPing = float(avgPingStr)
 
     if avgPing <= 250:
-        #begin rsync here
-        print avgPing
+        print 'The average ping to Drone1 is ' + avgPingStr + 'ms'
+        print 'Starting rsync trasnfer...'
+
+        subprocess.call('./rsync.sh')
+
 
 
 elif rc == 2:
-    print('%s no response' % droneIP)
+    print('Drone1 with IP: %s did not respond' % droneIP)
 
 else:
-    print('%s error' %droneIP)
+    print('Drone1 with IP: %s returned an error' %droneIP)
 
