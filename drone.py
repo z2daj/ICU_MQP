@@ -14,8 +14,10 @@ class Drone:
         self.ip = '' #ip for comms
         self.currWP = '' #current waypoint
 
+
     def updatePose(self):
         #connect to LLC and grab pose info
+
 
     def loadMission(self, mission):
         #load mission coordinates from file/from stream to LLC
