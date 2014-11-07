@@ -40,9 +40,10 @@ if rc == 0:
 
     if avgPing <= 250:
         print 'The average ping to Drone1 is ' + avgPingStr + 'ms'
-        print 'Starting rsync trasnfer...'
+        print 'Starting rsync transfer...'
 
-        subprocess.call('./rsync.sh')
+        print os.getcwd()
+        subprocess.call(['./rsync.sh', droneIP])
 
 elif rc == 2:
     print('Drone1 with IP: %s did not respond' % droneIP)
