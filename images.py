@@ -10,6 +10,9 @@ camera = picamera.PiCamera()
 imgDir = '/home/pi/Python/images'
 cwd = os.getcwd()
 
+FRAMES = 2500
+
+camera.resolution = (2592, 1944)
 
 #capture images to a specified output path with the timestamp as the filename
 def captureImage(outputPath):
@@ -36,4 +39,6 @@ else:
     print "Directory created."
 
 #captures an image to imgDir
-captureImage(imgDir)
+for frame in range(FRAMES):
+    captureImage(imgDir)
+    time.sleep(0.25)
