@@ -47,8 +47,8 @@ currentTime = time.time()
 # capture images for three minutes
 while (currentTime - startTime) < runTime:
 
-    print 'Time Difference: ' + (currentTime - startTime)
-    print 'Run Time: ' + runTime
+    print 'Time Difference: ' + str(currentTime - startTime)
+    print 'Run Time: ' + str(runTime)
 
     #captures an image to imgDir
     for frame in range(FRAMES):
