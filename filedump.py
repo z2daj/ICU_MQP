@@ -1,52 +1,37 @@
-#This python script will run on the GS (Ground-Station)
-#it will check to see if it can see any drones with the designated IP via PING
-#and if the PING latency is below 200ms (arbitrarily chosen, should test to determine appropriate threshold)
-#it will then initiate an rsync transfer of pictures stored in ~/Python/images to the machine's desktop
-#TODO - implement handshake between pi and GS to confirm transfer of files is complete
-#TODO - perhaps do files one at a time instead of a massive dump, need to test best method of delivery
+# import images using a network stream instead of a file-by-file basis
+# will it work? who knows! :D
 
-import os
-import subprocess
-import re
+import io
+import socket
+import struct
+from PIL import Image
 
-#setup some variables
-currDir = os.getcwd()
-gsIP = '1.4.19.116'  # needs to be updated to actual GS IP, probably of the 192.168.1.x variety
-droneIP = '1.4.19.120'  # needs to be updated to actual drone IP
-regex = '([0-9./])'  # regular expression for parsing ping statistics from ping output
+# Start a socket listening for connections on 0.0.0.0:8000 (0.0.0.0 means
+# all interfaces)
+server_socket = socket.socket()
+server_socket.bind(('0.0.0.0', 8000))
+server_socket.listen(0)
 
-#ping the bastard to see if it's available, and grab the command output
-print 'Pinging Drone1...'
-p = subprocess.Popen(['ping', '-c', '3', droneIP], stdout=subprocess.PIPE)
-stdOutput, stdError = p.communicate()
-rc = p.returncode
-
-if rc == 0:
-    print('Drone1 with IP: %s is active' % droneIP)
-
-    #grab average ping - on the second to last line every time out of 9 line output (7)
-    avgPingStr = stdOutput.splitlines()[7]
-
-    #perform regex to capture min/avg/max/std-dev ping statistics
-    reStr = re.findall(regex, avgPingStr)
-    reStr = ''.join(reStr)
-
-    #separate out each entry delimited by '/' character
-    reStr = reStr.split('/')
-
-    #grab the average ping result in ms
-    avgPingStr = reStr[4]
-    avgPing = float(avgPingStr)
-
-    if avgPing <= 250:
-        print 'The average ping to Drone1 is ' + avgPingStr + 'ms'
-        print 'Starting rsync transfer...'
-
-        print os.getcwd()
-        subprocess.call(['./rsync.sh', droneIP])
-
-elif rc == 2:
-    print('Drone1 with IP: %s did not respond' % droneIP)
-
-else:
-    print('Drone1 with IP: %s returned an error' %droneIP)
+# Accept a single connection and make a file-like object out of it
+connection = server_socket.accept()[0].makefile('rb')
+try:
+    while True:
+        # Read the length of the image as a 32-bit unsigned int. If the
+        # length is zero, quit the loop
+        image_len = struct.unpack('<L', connection.read(struct.calcsize('<L')))[0]
+        if not image_len:
+            break
+        # Construct a stream to hold the image data and read the image
+        # data from the connection
+        image_stream = io.BytesIO()
+        image_stream.write(connection.read(image_len))
+        # Rewind the stream, open it as an image with PIL and do some
+        # processing on it
+        image_stream.seek(0)
+        image = Image.open(image_stream)
+        print('Image is %dx%d' % image.size)
+        image.verify()
+        print('Image is verified')
+finally:
+    connection.close()
+    server_socket.close()
