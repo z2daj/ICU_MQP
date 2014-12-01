@@ -9,10 +9,11 @@ import time
 camera = picamera.PiCamera()
 cwd = os.getcwd()
 imgDir = cwd + '/images'
-runTime = (60)  # arbitrary capture time, should capture images for three minutes
+runTime = 60  # arbitrary capture time, should capture images for a minute
+sleepTime = 0.25  # sleep time for individual frame captures
 
-
-FRAMES = 2500
+#calculate number of frames needed to fill allotted time and round to nearest integer
+FRAMES = int(runTime * sleepTime)
 
 camera.resolution = (2592, 1944)
 
@@ -40,21 +41,10 @@ else:
     
     print "Directory created."
 
-# grab a start time
-startTime = time.time()
-currentTime = time.time()
 
-# capture images for three minutes
-while (currentTime - startTime) < runTime:
-
-    print 'Time Difference: ' + str(currentTime - startTime)
-    print 'Run Time: ' + str(runTime)
-
-    #captures an image to imgDir
-    for frame in range(FRAMES):
-        captureImage(imgDir)
-        time.sleep(0.25)
-
-    currentTime = time.time()
+#captures images to imgDir
+for frame in range(FRAMES):
+    captureImage(imgDir)
+    time.sleep(sleepTime)
 
 print 'Done capturing images.'
