@@ -1,45 +1,50 @@
-import io
-import socket
-import struct
-import time
+#This python script creates an images directory and will take pictures from
+#the PiCamera every 10sec and store them with timestamps in the images
+#directory
+
+import os
 import picamera
+import time
 
-# Connect a client socket to my_server:8000 (change my_server to the
-# hostname of your server)
-client_socket = socket.socket()
-client_socket.connect(('my_server', 8000))
+camera = picamera.PiCamera()
+cwd = os.getcwd()
+imgDir = cwd + '/images'
+runTime = 60  # arbitrary capture time, should capture images for a minute
+sleepTime = 0.25  # sleep time for individual frame captures
 
-# Make a file-like object out of the connection
-connection = client_socket.makefile('wb')
-try:
-    with picamera.PiCamera() as camera:
-        camera.resolution = (640, 480)
-        # Start a preview and let the camera warm up for 2 seconds
-        camera.start_preview()
-        time.sleep(2)
+#calculate number of frames needed to fill allotted time and round to nearest integer
+FRAMES = int(runTime * sleepTime)
 
-        # Note the start time and construct a stream to hold image data
-        # temporarily (we could write it directly to connection but in this
-        # case we want to find out the size of each capture first to keep
-        # our protocol simple)
-        start = time.time()
-        stream = io.BytesIO()
-        for foo in camera.capture_continuous(stream, 'jpeg'):
-            # Write the length of the capture to the stream and flush to
-            # ensure it actually gets sent
-            connection.write(struct.pack('<L', stream.tell()))
-            connection.flush()
-            # Rewind the stream and send the image data over the wire
-            stream.seek(0)
-            connection.write(stream.read())
-            # If we've been capturing for more than 30 seconds, quit
-            if time.time() - start > 30:
-                break
-            # Reset the stream for the next capture
-            stream.seek(0)
-            stream.truncate()
-    # Write a length of zero to the stream to signal we're done
-    connection.write(struct.pack('<L', 0))
-finally:
-    connection.close()
-    client_socket.close()
+camera.resolution = (2592, 1944)
+
+#capture images to a specified output path with the timestamp as the filename
+def captureImage(outputPath):
+    if os.path.exists(outputPath):
+        os.chdir(outputPath)
+        timeStr = time.strftime("%Y%m%d-%H%M%S")
+        camera.capture(timeStr + '.jpg')
+        print "Image captured with filename: " + timeStr + ".jpg"
+
+    else:
+        print "Output path: " + outputPath + "doesn't exist."
+
+#check to see if there is an existing output directory
+print 'Checking if /images exists...'
+
+if os.path.exists(imgDir):
+    print "It exists!"
+
+else:
+    print "It doesn't exist, creating directory"
+
+    os.makedirs(imgDir)
+    
+    print "Directory created."
+
+
+#captures images to imgDir
+for frame in range(FRAMES):
+    captureImage(imgDir)
+    time.sleep(sleepTime)
+
+print 'Done capturing images.'
