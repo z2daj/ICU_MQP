@@ -12,7 +12,7 @@ import re
 #setup some variables
 currDir = os.getcwd()
 gsIP = '1.4.19.116'  # needs to be updated to actual GS IP, probably of the 192.168.1.x variety
-droneIP = '1.4.19.120'  # needs to be updated to actual drone IP
+droneIP = '1.4.19.175'  # needs to be updated to actual drone IP
 regex = '([0-9./])'  # regular expression for parsing ping statistics from ping output
 
 #ping the bastard to see if it's available, and grab the command output
