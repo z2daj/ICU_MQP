@@ -1,6 +1,7 @@
-# this script will connect to an FTP server hosted by the Pi
-# our transfer will simply connect to the FTP server and pull all the files
-# currently present in the image capture directory and store them locally
+# this script connects to an open socket on the Pi and initiates image transfers
+# TODO: create directory for transfer results
+# TODO: create received files from filename and read in data to form complete image
+# TODO: do some kind of constant pinging of the server for dropped connection correction
 
 import os
 import socket
@@ -47,8 +48,16 @@ if rc == 0:
         print 'Connecting to Drone Server...'
 
         s.connect((droneIP, PORT))
-        s.send('Hello World')
-        data = s.recv(1024)
+        filename = s.recv(4096)  # receive each filename of current image being sent
+
+        data = s.recv(4096)
+
+        while data:
+            with open(filename, 'w'):
+                filename.write(data)
+
+            #this is where reading each file line by line will come in handy
+
         s.close()
         print 'Received', repr(data)
 

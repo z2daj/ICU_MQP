@@ -1,6 +1,9 @@
-#This python script creates an images directory and will take pictures from
-#the PiCamera every 10sec and store them with timestamps in the images
-#directory
+# This python script will take a number of images based on desired time
+# and then store them in an 'images' directory
+# finally, for testing purposes, it will create a socketed connection through which these images will be transfered
+# to the groundstation
+# TODO: test logic for transferring files line by line.
+#
 
 import os
 import picamera
@@ -23,11 +26,28 @@ s.listen(1)
 conn, addr = s.accept()
 print 'Connected by: ', addr
 
-while 1:
-    data = conn.recv(1024)
-    if not data: break
-    conn.send(data)
+#prepare send every single picture line by line as a string (seems archaic, but hey, we'll see how it works"
+for filename in os.listdir(imgDir):
+    data = conn.recv(4096)
+    conn.send(filename)
+
+    with open(filename, 'b') as f:
+        for line in f:
+            if not line:
+                break
+
+            conn.send(line)
+
 conn.close()
+
+# while 1:
+#     data = conn.recv(4096)  # buffer size of 4096 bytes
+#     if not data:
+#         break
+#
+#     conn.send(data)
+#
+# conn.close()
 
 
 #
