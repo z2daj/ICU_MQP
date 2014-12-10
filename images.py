@@ -31,7 +31,7 @@ for filename in os.listdir(imgDir):
     # data = conn.recv(4096)
     conn.send(filename)
 
-    with open(filename, 'b') as f:
+    with open(filename, 'rb') as f:
         for line in f:
             if not line:
                 break
