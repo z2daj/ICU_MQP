@@ -52,6 +52,8 @@ if rc == 0:
 
         data = s.recv(4096)
 
+        print(data)
+
         while data:
             with open(filename, 'w'):
                 filename.write(data)
