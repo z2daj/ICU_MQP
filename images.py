@@ -28,6 +28,8 @@ print 'Connected by: ', addr
 
 #prepare send every single picture line by line as a string (seems archaic, but hey, we'll see how it works)
 for filename in os.listdir(imgDir):
+
+    print(filename)
     # data = conn.recv(4096)
     conn.send(filename)
 
