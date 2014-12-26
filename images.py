@@ -14,6 +14,7 @@ camera = picamera.PiCamera()
 cwd = os.getcwd()
 time = time.time()  # doesn't do anything, just to make things happy
 imgDir = cwd + '/images'
+imgPath = imgDir +'/'
 runTime = 60  # arbitrary capture time, should capture images for a minute
 sleepTime = 0.25  # sleep time for individual frame captures
 
@@ -33,7 +34,7 @@ for filename in os.listdir(imgDir):
     # data = conn.recv(4096)
     conn.send(filename)
 
-    with open((imgDir+filename), 'rb') as f:
+    with open((imgPath+filename), 'rb') as f:
         for line in f:
             if not line:
                 break
