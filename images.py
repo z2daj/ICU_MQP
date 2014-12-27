@@ -17,6 +17,7 @@ imgDir = cwd + '/images'
 imgPath = imgDir +'/'
 runTime = 60  # arbitrary capture time, should capture images for a minute
 sleepTime = 0.25  # sleep time for individual frame captures
+sockBuff = 4096
 
 #set up server socket for connections
 HOST = ''
@@ -26,6 +27,22 @@ s.bind((HOST, PORT))
 s.listen(1)
 conn, addr = s.accept()
 print 'Connected by: ', addr
+
+while True:
+    req = s.recv(4096)
+
+    print req
+
+    if req.equals('name'):
+        files = os.listdir(imgDir)
+
+        name = files[0]
+        print name
+
+        s.send(name)
+
+
+
 
 #prepare send every single picture line by line as a string (seems archaic, but hey, we'll see how it works)
 for filename in os.listdir(imgDir):

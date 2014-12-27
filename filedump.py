@@ -13,10 +13,18 @@ currDir = os.getcwd()
 gsIP = '1.4.19.116'  # needs to be updated to actual GS IP, probably of the 192.168.1.x variety
 droneIP = '1.4.19.175'  # needs to be updated to actual drone IP
 regex = '([0-9./])'  # regular expression for parsing ping statistics from ping output
+sockBuff = 4096
 
 #set up client socket for remote connection
 PORT = 5007
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+#method to request filanme from server
+def requestImageName(sock):
+    sock.send('name')
+    name = sock.recv(sockBuff)
+
+    return name
 
 
 #ping the bastard to see if it's available, and grab the command output
@@ -48,11 +56,10 @@ if rc == 0:
         print 'Connecting to Drone Server...'
 
         s.connect((droneIP, PORT))
-        filename = s.recv(4096)  # receive each filename of current image being sent
 
-        # data = s.recv(4096)
+        filename = requestImageName(s)
 
-        print(filename)
+        print filename
 
         # while data:
         #     with open(filename, 'wb') as f:
