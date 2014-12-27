@@ -24,11 +24,12 @@ HOST = ''
 PORT = 5007
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((HOST, PORT))
-s.listen(1)
-conn, addr = s.accept()
-print 'Connected by: ', addr
+s.listen(2)  # should only be one client at a time, but made 2 for debugging purposes
+
 
 while True:
+    (conn, addr) = s.accept()
+    print 'Connected by: ', addr
     req = s.recv(4096)
 
     print req
