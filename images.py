@@ -28,18 +28,18 @@ s.listen(2)  # should only be one client at a time, but made 2 for debugging pur
 (conn, addr) = s.accept()
 print 'Connected by: ', addr
 
-while True:
-    req = s.recv(4096)
+# while True:
+req = s.recv(4096)
 
-    print req
+print req
 
-    if req.equals('name'):
-        files = os.listdir(imgDir)
+if req.equals('name'):
+    files = os.listdir(imgDir)
 
-        name = files[0]
-        print name
+    name = files[0]
+    print name
 
-        s.send(name)
+    s.send(name)
 
 
 
