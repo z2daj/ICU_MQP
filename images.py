@@ -28,28 +28,30 @@ s.listen(2)  # should only be one client at a time, but made 2 for debugging pur
 (conn, addr) = s.accept()
 print 'Connected by: ', addr
 
-# while True:
-req = s.recv(4096)
+while True:
+    req = s.recv(sockBuff)
 
-print req
+    print req
 
-if req.equals('name'):
-    files = os.listdir(imgDir)
+    if req.equals('name'):
+        files = os.listdir(imgDir)
 
-    name = files[0]
-    print name
+        name = files[0]
+        print name
 
-    s.send(name)
+        s.send(name)
+
+s.close()
 
 
 
 
-#prepare send every single picture line by line as a string (seems archaic, but hey, we'll see how it works)
-for filename in os.listdir(imgDir):
-
-    print(filename)
-    # data = conn.recv(4096)
-    conn.send(filename)
+# #prepare send every single picture line by line as a string (seems archaic, but hey, we'll see how it works)
+# for filename in os.listdir(imgDir):
+#
+#     print(filename)
+#     # data = conn.recv(4096)
+#     conn.send(filename)
 
     # with open((imgPath+filename), 'rb') as f:
     #     for line in f:
@@ -59,7 +61,7 @@ for filename in os.listdir(imgDir):
     #         conn.send(line)
     #         print(line)
 
-conn.close()
+# conn.close()
 
 # while 1:
 #     data = conn.recv(4096)  # buffer size of 4096 bytes
