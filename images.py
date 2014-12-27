@@ -34,13 +34,13 @@ for filename in os.listdir(imgDir):
     # data = conn.recv(4096)
     conn.send(filename)
 
-    with open((imgPath+filename), 'rb') as f:
-        for line in f:
-            if not line:
-                break
-
-            conn.send(line)
-            print(line)
+    # with open((imgPath+filename), 'rb') as f:
+    #     for line in f:
+    #         if not line:
+    #             break
+    #
+    #         conn.send(line)
+    #         print(line)
 
 conn.close()
 

@@ -50,18 +50,18 @@ if rc == 0:
         s.connect((droneIP, PORT))
         filename = s.recv(4096)  # receive each filename of current image being sent
 
-        data = s.recv(4096)
+        # data = s.recv(4096)
 
-        print(data)
+        print(filename)
 
-        while data:
-            with open(filename, 'w'):
-                filename.write(data)
+        # while data:
+        #     with open(filename, 'wb') as f:
+        #         f.write(data)
 
             #this is where reading each file line by line will come in handy
 
         s.close()
-        print 'Received', repr(data)
+        # print 'Received', repr(data)
 
 
 elif rc == 2:
