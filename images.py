@@ -44,12 +44,17 @@ while True:
 
     if req == 'img':
         with open(imgPath + name, 'rb') as f:
+
+            # size = os.path.getsize(imgPath + name)
+            # conn.send(size)
+
             for line in f:
-                print 'Line:' + line
                 if not line:
                     break
 
             conn.send(line)
+
+
 
     if req == 'close':
         conn.shutdown()

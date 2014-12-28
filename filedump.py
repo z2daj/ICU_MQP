@@ -31,14 +31,19 @@ def requestImageName(sock):
 
 
 def requestImage(sock, name):
-    sock.send('img')
 
+    sock.send('img')
+    # totalSize = sock.recv(sockBuff)
     img = sock.recv(sockBuff)
+
+
+
 
     while img:
         with open(name, 'wb') as f:
             print 'Data: ' + img
             f.write(img)
+        img = sock.recv(sockBuff)
 
     print 'Received image: ' + name
 
