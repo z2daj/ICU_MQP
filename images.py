@@ -20,6 +20,8 @@ runTime = 60  # arbitrary capture time, should capture images for a minute
 sleepTime = 0.25  # sleep time for individual frame captures
 sockBuff = 4096
 
+sz = 0
+
 #set up server socket for connections
 HOST = ''
 PORT = 5007
@@ -52,7 +54,6 @@ def update_progress(progress):
 
 while True:
 
-    sz = 0
     req = conn.recv(sockBuff)
 
     print req
