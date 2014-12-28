@@ -75,7 +75,7 @@ while True:
                     break
 
             size = len(line)
-            print "here: " + line
+            print "here: " + size
             conn.send(line)
 
     if req == 'close':
