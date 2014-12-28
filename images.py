@@ -54,8 +54,6 @@ while True:
 
             conn.send(line)
 
-
-
     if req == 'close':
         conn.shutdown()
         conn.close()
