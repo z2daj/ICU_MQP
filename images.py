@@ -28,6 +28,27 @@ s.listen(2)  # should only be one client at a time, but made 2 for debugging pur
 (conn, addr) = s.accept()
 print 'Connected by: ', addr
 
+
+def update_progress(progress):
+    barLength = 10 # Modify this to change the length of the progress bar
+    status = ""
+    if isinstance(progress, int):
+        progress = float(progress)
+    if not isinstance(progress, float):
+        progress = 0
+        status = "error: progress var must be float\r\n"
+    if progress < 0:
+        progress = 0
+        status = "Halt...\r\n"
+    if progress >= 1:
+        progress = 1
+        status = "Done...\r\n"
+    block = int(round(barLength*progress))
+    text = "\rPercent: [{0}] {1}% {2}".format( "#"*block + "-"*(barLength-block), progress*100, status)
+    sys.stdout.write(text)
+    sys.stdout.flush()
+
+
 while True:
 
     req = conn.recv(sockBuff)
@@ -53,6 +74,8 @@ while True:
                 if not line:
                     break
 
+            size = len(line)
+            print "here: " + line
             conn.send(line)
 
     if req == 'close':
