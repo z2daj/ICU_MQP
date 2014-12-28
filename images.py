@@ -45,9 +45,6 @@ while True:
     if req == 'img':
         with open(imgPath + name, 'rb') as f:
 
-            # size = os.path.getsize(imgPath + name)
-            # conn.send(size)
-
             for line in f:
                 if not line:
                     break
@@ -60,36 +57,6 @@ while True:
         break
 
 s.close()
-
-
-
-
-# #prepare send every single picture line by line as a string (seems archaic, but hey, we'll see how it works)
-# for filename in os.listdir(imgDir):
-#
-#     print(filename)
-#     # data = conn.recv(4096)
-#     conn.send(filename)
-
-    # with open((imgPath+filename), 'rb') as f:
-    #     for line in f:
-    #         if not line:
-    #             break
-    #
-    #         conn.send(line)
-    #         print(line)
-
-# conn.close()
-
-# while 1:
-#     data = conn.recv(4096)  # buffer size of 4096 bytes
-#     if not data:
-#         break
-#
-#     conn.send(data)
-#
-# conn.close()
-
 
 #
 # #calculate number of frames needed to fill allotted time and round to nearest integer

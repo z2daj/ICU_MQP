@@ -33,11 +33,8 @@ def requestImageName(sock):
 def requestImage(sock, name):
 
     sock.send('img')
-    # totalSize = sock.recv(sockBuff)
+
     img = sock.recv(sockBuff)
-
-
-
 
     while img:
         with open(name, 'wb') as f:
@@ -92,14 +89,7 @@ if rc == 0:
 
         sendRequest(s, 'close')
 
-        # while data:
-        #     with open(filename, 'wb') as f:
-        #         f.write(data)
-
-            #this is where reading each file line by line will come in handy
-
         s.close()
-        # print 'Received', repr(data)
 
 
 elif rc == 2:
