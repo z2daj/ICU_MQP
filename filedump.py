@@ -22,8 +22,9 @@ PORT = 5007
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 
-#method to request filanme from server
+#method to request filename from server
 def requestImageName(sock):
+
     sock.send('name')
     name = sock.recv(sockBuff)
 
