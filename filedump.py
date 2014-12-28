@@ -35,6 +35,10 @@ def requestImage(sock, name):
 
     sock.send('img')
 
+    size = sock.recv(sockBuff)
+
+    print size
+
     img = sock.recv(sockBuff)
 
     while img:
