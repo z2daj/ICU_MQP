@@ -6,6 +6,7 @@
 #TODO: write a general send request function, and perform necessary actions based on that return
 
 import os
+import sys
 import socket
 import subprocess
 import re
@@ -22,6 +23,26 @@ PORT = 5007
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 
+def update_progress(progress):
+    barLength = 10 # Modify this to change the length of the progress bar
+    status = ""
+    if isinstance(progress, int):
+        progress = float(progress)
+    if not isinstance(progress, float):
+        progress = 0
+        status = "error: progress var must be float\r\n"
+    if progress < 0:
+        progress = 0
+        status = "Halt...\r\n"
+    if progress >= 1:
+        progress = 1
+        status = "Done...\r\n"
+    block = int(round(barLength*progress))
+    text = "\rPercent: [{0}] {1}% {2}".format( "#"*block + "-"*(barLength-block), progress*100, status)
+    sys.stdout.write(text)
+    sys.stdout.flush()
+
+
 #method to request filename from server
 def requestImageName(sock):
 
@@ -33,6 +54,7 @@ def requestImageName(sock):
 
 def requestImage(sock, name):
 
+    sz = 0
     sock.send('img')
 
     size = sock.recv(sockBuff)
@@ -40,6 +62,12 @@ def requestImage(sock, name):
     print size
 
     img = sock.recv(sockBuff)
+
+    sz += int(img)
+
+    update_progress(sz/size)
+
+    print
 
     while img:
         with open(name, 'wb') as f:
