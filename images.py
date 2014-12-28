@@ -42,6 +42,18 @@ while True:
 
         conn.send(name)
 
+    if req == 'img':
+        with open(name, 'rb') as f:
+            for line in f:
+                if not line:
+                    break
+
+            conn.send(line)
+
+    if req == 'close':
+        conn.shutdown()
+        conn.close()
+        break
 
 s.close()
 

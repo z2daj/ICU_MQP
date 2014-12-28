@@ -3,6 +3,8 @@
 # TODO: create received files from filename and read in data to form complete image
 # TODO: do some kind of constant pinging of the server for dropped connection correction
 
+#TODO: write a general send request function, and perform necessary actions based on that return
+
 import os
 import socket
 import subprocess
@@ -25,6 +27,17 @@ def requestImageName(sock):
     name = sock.recv(sockBuff)
 
     return name
+
+def requestImage(sock, name):
+    sock.send('img')
+
+    img = sock.recv(sockBuff)
+
+    while img:
+        with open(name, 'wb') as f:
+            f.write(img)
+
+    print 'Received image: ' + name
 
 
 #ping the bastard to see if it's available, and grab the command output
@@ -60,6 +73,8 @@ if rc == 0:
         filename = requestImageName(s)
 
         print filename
+
+        requestImage(s, filename)
 
         # while data:
         #     with open(filename, 'wb') as f:
