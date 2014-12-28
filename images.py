@@ -46,7 +46,7 @@ while True:
         with open(imgPath + name, 'rb') as f:
 
             size = os.path.getsize(f.name)
-            conn.send(size)
+            conn.send(str(size))
             print size
 
             for line in f:
