@@ -30,10 +30,9 @@ print 'Connected by: ', addr
 
 while True:
 
-    req = s.recv(sockBuff)
+    req = conn.recv(sockBuff)
 
     print req
-    print 'here'
 
     if req.equals('name'):
         files = os.listdir(imgDir)
@@ -41,7 +40,7 @@ while True:
         name = files[0]
         print name
 
-        s.send(name)
+        conn.send(name)
 
 
 s.close()
