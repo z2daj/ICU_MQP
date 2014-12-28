@@ -34,7 +34,7 @@ while True:
 
     print req
 
-    if req.equals('name'):
+    if req == 'name':
         files = os.listdir(imgDir)
 
         name = files[0]
