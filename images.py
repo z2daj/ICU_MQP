@@ -52,6 +52,7 @@ def update_progress(progress):
 
 while True:
 
+    sz = 0
     req = conn.recv(sockBuff)
 
     print req
@@ -75,7 +76,7 @@ while True:
                 if not line:
                     break
 
-            sz = len(line)
+            sz += len(line)
 
             update_progress(sz/size)
 
