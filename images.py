@@ -29,9 +29,11 @@ s.listen(2)  # should only be one client at a time, but made 2 for debugging pur
 print 'Connected by: ', addr
 
 while True:
+
     req = s.recv(sockBuff)
 
     print req
+    print 'here'
 
     if req.equals('name'):
         files = os.listdir(imgDir)
