@@ -9,6 +9,7 @@ import os
 import picamera
 import time
 import socket
+import sys
 
 camera = picamera.PiCamera()
 cwd = os.getcwd()
