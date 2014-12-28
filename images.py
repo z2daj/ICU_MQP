@@ -45,6 +45,7 @@ while True:
     if req == 'img':
         with open(imgPath + name, 'rb') as f:
             for line in f:
+                print 'Line:' + line
                 if not line:
                     break
 

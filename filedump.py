@@ -37,6 +37,7 @@ def requestImage(sock, name):
 
     while img:
         with open(name, 'wb') as f:
+            print 'Data: ' + img
             f.write(img)
 
     print 'Received image: ' + name
