@@ -74,8 +74,10 @@ while True:
                 if not line:
                     break
 
-            size = len(line)
-            print "here: " + size
+            sz = len(line)
+
+            update_progress(sz/size)
+
             conn.send(line)
 
     if req == 'close':
