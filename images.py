@@ -43,7 +43,7 @@ while True:
         conn.send(name)
 
     if req == 'img':
-        with open(name, 'rb') as f:
+        with open(imgPath + name, 'rb') as f:
             for line in f:
                 if not line:
                     break

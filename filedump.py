@@ -21,12 +21,14 @@ sockBuff = 4096
 PORT = 5007
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
+
 #method to request filanme from server
 def requestImageName(sock):
     sock.send('name')
     name = sock.recv(sockBuff)
 
     return name
+
 
 def requestImage(sock, name):
     sock.send('img')
@@ -39,6 +41,12 @@ def requestImage(sock, name):
 
     print 'Received image: ' + name
 
+    
+def sendRequest(sock, req):
+    sock.send(req)
+    ret = sock.recv(sockBuff)
+
+    return ret
 
 #ping the bastard to see if it's available, and grab the command output
 print 'Pinging Drone1...'
@@ -75,6 +83,8 @@ if rc == 0:
         print filename
 
         requestImage(s, filename)
+
+        sendRequest(s, 'close')
 
         # while data:
         #     with open(filename, 'wb') as f:
