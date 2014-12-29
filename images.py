@@ -80,9 +80,9 @@ while True:
 
                 conn.send(line)
 
-                sz += len(line)
-                print str(sz) + '/' + str(size)
-                # update_progress(sz/size)
+                sz += float(len(line))
+
+                update_progress(sz/size)
 
         conn.send('done')
 

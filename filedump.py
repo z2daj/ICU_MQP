@@ -62,19 +62,15 @@ def requestImage(sock, name):
 
     img = sock.recv(sockBuff)
 
-    sz += len(img)
+    sz += float(len(img))
 
     while img != 'done':
 
         f.write(img)
 
         img = sock.recv(sockBuff)
-        sz += len(img)
-        print str(sz) + '/' + str(size)
-        print 'test'
-        print str(sz/size)
-        print '\n'
-        # update_progress(sz/size)
+        sz += float(len(img))
+        update_progress(sz/size)
 
     f.close()
     print 'Received image: ' + name
