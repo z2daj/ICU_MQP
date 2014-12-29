@@ -57,8 +57,6 @@ while True:
 
     req = conn.recv(sockBuff)
 
-    print req
-
     if req == 'name':
         files = os.listdir(imgDir)
 
@@ -83,6 +81,7 @@ while True:
                 conn.send(line)
 
                 sz += len(line)
+                print sz
                 update_progress(float(sz/size))
 
     if req == 'close':
