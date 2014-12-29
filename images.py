@@ -92,6 +92,7 @@ while True:
 
                 update_progress(sz/size)
 
+        f.close()
         conn.send('done')
 
     if req == 'close':
