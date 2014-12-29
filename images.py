@@ -79,6 +79,8 @@ while True:
 
             sz += len(line)
 
+            print(sz/size)
+
             update_progress(sz/size)
 
             conn.send(line)
