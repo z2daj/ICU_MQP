@@ -71,7 +71,7 @@ def requestImage(sock, name):
         sock.send('img')
         img = sock.recv(sockBuff)
         sz += len(img)
-        print float(sz/size) + '\r'
+        print str(float(sz/size)) + '\r'
 
     print 'Received image: ' + name
 
