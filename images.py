@@ -58,15 +58,16 @@ while True:
 
     print req
 
-    if req == 'name':
+    while req == 'name':
         files = os.listdir(imgDir)
 
         name = files[0]
         print name
 
         conn.send(name)
+        req = ''
 
-    if req == 'img':
+    while req == 'img':
         with open(imgPath + name, 'r') as f:
 
             size = os.path.getsize(f.name)
@@ -84,6 +85,8 @@ while True:
             update_progress(float(sz/size))
 
             conn.send(line)
+
+        req = ''
 
     if req == 'close':
         conn.shutdown()
