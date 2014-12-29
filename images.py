@@ -87,11 +87,11 @@ while True:
         conn.send('done')
 
     if req == 'close':
-        # conn.shutdown()
+        conn.shutdown(socket.SHUT_RDWR)
         conn.close()
         break
 
-
+s.shutdown(socket.SHUT_RDWR)
 s.close()
 
 #

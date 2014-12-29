@@ -71,6 +71,9 @@ def requestImage(sock, name):
         img = sock.recv(sockBuff)
         sz += len(img)
         print str(sz) + '/' + str(size)
+        print 'test'
+        print str(sz/size)
+        print '\n'
         # update_progress(sz/size)
 
     f.close()
