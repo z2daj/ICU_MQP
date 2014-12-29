@@ -53,6 +53,14 @@ def update_progress(progress):
     sys.stdout.flush()
 
 
+def countFiles(dir):
+    return len([name for name in os.listdir(dir) if os.path.isfile(os.path.join(dir, name))])
+
+
+fileCount = countFiles(imgDir)
+
+print fileCount
+
 while True:
 
     req = conn.recv(sockBuff)
