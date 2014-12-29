@@ -86,7 +86,6 @@ while True:
             conn.send('done')
 
     if req == 'close':
-        conn.shutdown()
         conn.close()
         break
 
