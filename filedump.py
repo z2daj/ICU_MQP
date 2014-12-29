@@ -123,10 +123,13 @@ if rc == 0:
 
         requestImage(s, filename)
 
-        sendRequest(s, 'close')
+        re = sendRequest(s, 'close')
 
-        s.shutdown(socket.SHUT_RDWR)
-        s.close()
+        print re
+
+        if re == 'closing':
+            s.shutdown(socket.SHUT_RDWR)
+            s.close()
 
 
 elif rc == 2:
