@@ -73,7 +73,7 @@ while True:
         for name in files:
             conn.send(name)
             print name
-            time.sleep(0.01)  # wait for buffer to be received before sending next name
+            time.sleep(0.05)  # wait for buffer to be received before sending next name
 
         conn.send('done')
 
