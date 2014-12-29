@@ -84,6 +84,8 @@ while True:
                 print sz
                 update_progress(float(sz/size))
 
+            conn.send('done')
+
     if req == 'close':
         conn.shutdown()
         conn.close()

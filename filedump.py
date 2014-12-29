@@ -65,7 +65,7 @@ def requestImage(sock, name):
 
     update_progress(sz/size)
 
-    while img:
+    while img != 'done':
         with open(name, 'w') as f:
             f.write(img)
         img = sock.recv(sockBuff)
