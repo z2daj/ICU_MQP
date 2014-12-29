@@ -79,7 +79,7 @@ while True:
 
             sz += len(line)
 
-            update_progress(sz/size)
+            update_progress(float(sz/size))
 
             conn.send(line)
 
