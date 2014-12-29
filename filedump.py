@@ -70,7 +70,7 @@ def requestImage(sock, name):
 
         img = sock.recv(sockBuff)
         sz += len(img)
-        print str(float(sz/size)) + '\r'
+        update_progress(sz/size)
 
     f.close()
     print 'Received image: ' + name
