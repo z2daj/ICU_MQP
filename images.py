@@ -79,6 +79,8 @@ while True:
 
             sz += len(line)
 
+            print 'here: ' + str(sz)
+
             update_progress(float(sz/size))
 
             conn.send(line)
