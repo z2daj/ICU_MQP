@@ -125,6 +125,7 @@ if rc == 0:
 
         sendRequest(s, 'close')
 
+        s.shutdown(socket.SHUT_RDWR)
         s.close()
 
 
