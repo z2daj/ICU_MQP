@@ -83,9 +83,10 @@ while True:
                 sz += len(line)
                 print str(float(sz/size)) + '\r'
 
-            conn.send('done')
+        conn.send('done')
 
     if req == 'close':
+        conn.shutdown()
         conn.close()
         break
 
