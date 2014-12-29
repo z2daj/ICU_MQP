@@ -87,7 +87,7 @@ def requestImageList(sock):
     while name != 'done':
         files.append(name)
         name = sock.recv(sockBuff)
-        print('name: %s\n', name)
+        print files
 
     print 'Received file list.'
 

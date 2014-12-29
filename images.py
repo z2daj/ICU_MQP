@@ -27,9 +27,9 @@ size = 0
 HOST = ''
 PORT = 5007
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 s.bind((HOST, PORT))
 s.listen(2)  # should only be one client at a time, but made 2 for debugging purposes
-s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 (conn, addr) = s.accept()
 print 'Connected by: ', addr
 
