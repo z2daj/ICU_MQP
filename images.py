@@ -81,12 +81,13 @@ while True:
                 conn.send(line)
 
                 sz += len(line)
-                update_progress(sz/size)
+                print str(sz) + '/' + str(size)
+                # update_progress(sz/size)
 
         conn.send('done')
 
     if req == 'close':
-        conn.shutdown()
+        # conn.shutdown()
         conn.close()
         break
 
