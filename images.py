@@ -74,6 +74,7 @@ while True:
         for name in files:
             conn.send(name)
             print name
+            time.sleep(0.01)
 
         print 'here'
         conn.send('done')
