@@ -56,18 +56,26 @@ while True:
 
     req = conn.recv(sockBuff)
 
+    if req == 'name':
+        k = 1
+    elif req == 'img':
+        k = 2
+    elif req == 'close':
+        k = 3
+    else:
+        k = 0
+
     print req
 
-    while req == 'name':
+    if k == 1:
         files = os.listdir(imgDir)
 
         name = files[0]
         print name
 
         conn.send(name)
-        req = ''
 
-    while req == 'img':
+    if k == 2:
         with open(imgPath + name, 'r') as f:
 
             size = os.path.getsize(f.name)
@@ -86,12 +94,13 @@ while True:
 
             conn.send(line)
 
-        req = ''
-
-    if req == 'close':
+    if k == 3:
         conn.shutdown()
         conn.close()
         break
+
+    if k == 0:
+        print 'An error as occurred.'
 
 s.close()
 
