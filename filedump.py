@@ -18,6 +18,8 @@ droneIP = '1.4.19.175'  # needs to be updated to actual drone IP
 regex = '([0-9./])'  # regular expression for parsing ping statistics from ping output
 sockBuff = 4096
 
+size = 0
+
 #set up client socket for remote connection
 PORT = 5007
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -57,11 +59,6 @@ def requestImage(sock, name):
     sz = 0
     sock.send('img')
 
-    size = int(sock.recv(sockBuff))
-
-
-    print size
-
     img = sock.recv(sockBuff)
 
     sz += len(img)
@@ -74,6 +71,9 @@ def requestImage(sock, name):
         img = sock.recv(sockBuff)
         sz += len(img)
         update_progress(sz/size)
+
+        sock.send('img')
+        img = sock.recv(sockBuff)
 
 
     print 'Received image: ' + name
@@ -118,6 +118,10 @@ if rc == 0:
         filename = requestImageName(s)
 
         print filename
+
+        size = int(sendRequest(s, 'size'))
+
+        print size
 
         requestImage(s, filename)
 

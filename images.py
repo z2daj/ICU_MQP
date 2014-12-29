@@ -21,6 +21,7 @@ sleepTime = 0.25  # sleep time for individual frame captures
 sockBuff = 4096
 
 sz = 0
+size = 0
 
 #set up server socket for connections
 HOST = ''
@@ -56,18 +57,9 @@ while True:
 
     req = conn.recv(sockBuff)
 
-    if req == 'name':
-        k = 1
-    elif req == 'img':
-        k = 2
-    elif req == 'close':
-        k = 3
-    else:
-        k = 0
-
     print req
 
-    if k == 1:
+    if req == 'name':
         files = os.listdir(imgDir)
 
         name = files[0]
@@ -75,32 +67,29 @@ while True:
 
         conn.send(name)
 
-    if k == 2:
+    if req == 'size':
         with open(imgPath + name, 'r') as f:
 
             size = os.path.getsize(f.name)
             conn.send(str(size))
             print size
 
+    if req == 'img':
+        with open(imgPath + name, 'r') as f:
             for line in f:
                 if not line:
                     break
 
-            sz += len(line)
+                conn.send(line)
 
-            print 'here: ' + str(sz)
+                sz += len(line)
+                update_progress(float(sz/size))
 
-            update_progress(float(sz/size))
-
-            conn.send(line)
-
-    if k == 3:
+    if req == 'close':
         conn.shutdown()
         conn.close()
         break
 
-    if k == 0:
-        print 'An error as occurred.'
 
 s.close()
 
