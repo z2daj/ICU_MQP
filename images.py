@@ -75,6 +75,7 @@ while True:
             conn.send(name)
             print name
 
+        print 'here'
         conn.send('done')
 
     if req == 'size':
