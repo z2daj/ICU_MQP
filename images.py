@@ -13,7 +13,6 @@ import sys
 
 camera = picamera.PiCamera()
 cwd = os.getcwd()
-time = time.time()  # doesn't do anything, just to make things happy
 imgDir = cwd + '/images'
 imgPath = imgDir + '/'
 runTime = 60  # arbitrary capture time, should capture images for a minute
