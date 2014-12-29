@@ -19,6 +19,7 @@ regex = '([0-9./])'  # regular expression for parsing ping statistics from ping 
 sockBuff = 4096
 
 size = 0
+files = list()
 
 #set up client socket for remote connection
 PORT = 5007
@@ -76,6 +77,16 @@ def requestImage(sock, name):
     print 'Received image: ' + name
 
 
+def requestImageList(sock):
+
+    sock.send('list')
+    name = sock.recv(sockBuff)
+
+    while name != 'done':
+        list.append(name)
+
+    print 'Received file list: ' + list
+
     
 def sendRequest(sock, req):
     sock.send(req)
@@ -113,6 +124,8 @@ if rc == 0:
 
         s.connect((droneIP, PORT))
 
+        requestImageList(s)
+
         filename = requestImageName(s)
 
         print filename
@@ -121,7 +134,7 @@ if rc == 0:
 
         print size
 
-        requestImage(s, filename)
+        # requestImage(s, filename)
 
         re = sendRequest(s, 'close')
 

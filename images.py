@@ -68,13 +68,13 @@ while True:
 
     print req
 
-    if req == 'name':
+    if req == 'list':
         files = os.listdir(imgDir)
 
-        name = files[0]
-        print name
+        for name in files:
+            conn.send(name)
 
-        conn.send(name)
+        conn.send('done')
 
     if req == 'size':
         with open(imgPath + name, 'r') as f:
