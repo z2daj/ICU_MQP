@@ -29,6 +29,7 @@ PORT = 5007
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((HOST, PORT))
 s.listen(2)  # should only be one client at a time, but made 2 for debugging purposes
+s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 (conn, addr) = s.accept()
 print 'Connected by: ', addr
 
@@ -65,6 +66,8 @@ while True:
 
     req = conn.recv(sockBuff)
 
+    print req
+
     if req == 'name':
         files = os.listdir(imgDir)
 
@@ -92,6 +95,8 @@ while True:
 
                 update_progress(sz/size)
 
+        filesTrans = filesTrans.append(name)
+        fileCount -= 1
         f.close()
         conn.send('done')
 
