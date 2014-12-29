@@ -85,7 +85,7 @@ def requestImageList(sock):
     print name
 
     while name != 'done':
-        # files.append(name)
+        files.append(name)
         name = sock.recv(sockBuff)
         print name
 
@@ -131,6 +131,7 @@ if rc == 0:
         requestImageList(s)
 
         print files
+        print len(files)
 
         # filename = requestImageName(s)
         #
