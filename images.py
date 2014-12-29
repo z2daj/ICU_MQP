@@ -67,7 +67,7 @@ while True:
         conn.send(name)
 
     if req == 'img':
-        with open(imgPath + name, 'rb') as f:
+        with open(imgPath + name, 'r') as f:
 
             size = os.path.getsize(f.name)
             conn.send(str(size))
@@ -78,8 +78,6 @@ while True:
                     break
 
             sz += len(line)
-
-            print(sz/size)
 
             update_progress(sz/size)
 
