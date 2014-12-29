@@ -19,7 +19,7 @@ regex = '([0-9./])'  # regular expression for parsing ping statistics from ping 
 sockBuff = 4096
 
 size = 0
-files = list()
+files = []
 
 #set up client socket for remote connection
 PORT = 5007
@@ -27,7 +27,7 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 
 def update_progress(progress):
-    barLength = 10 # Modify this to change the length of the progress bar
+    barLength = 10  # Modify this to change the length of the progress bar
     status = ""
     if isinstance(progress, int):
         progress = float(progress)
@@ -82,10 +82,14 @@ def requestImageList(sock):
     sock.send('list')
     name = sock.recv(sockBuff)
 
-    while name != 'done':
-        list.append(name)
+    print name
 
-    print 'Received file list: ' + list
+    while name != 'done':
+        files.append(name)
+        name = sock.recv(sockBuff)
+        print name
+
+    print 'Received file list: ' + files
 
     
 def sendRequest(sock, req):

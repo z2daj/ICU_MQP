@@ -73,6 +73,7 @@ while True:
 
         for name in files:
             conn.send(name)
+            print name
 
         conn.send('done')
 
