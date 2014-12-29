@@ -81,7 +81,7 @@ while True:
                 conn.send(line)
 
                 sz += len(line)
-                print float(sz/size)
+                print float(sz/size) + '\r'
 
             conn.send('done')
 
