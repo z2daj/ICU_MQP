@@ -20,7 +20,7 @@ sleepTime = 0.25  # sleep time for individual frame captures
 sockBuff = 4096
 
 sz = 0
-size = 0
+size = 2100000
 
 #set up server socket for connections
 HOST = ''

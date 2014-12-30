@@ -18,7 +18,7 @@ droneIP = '1.4.19.175'  # needs to be updated to actual drone IP
 regex = '([0-9./])'  # regular expression for parsing ping statistics from ping output
 sockBuff = 4096
 
-size = 0
+size = 2100000
 files = []
 
 #set up client socket for remote connection
