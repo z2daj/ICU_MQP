@@ -10,9 +10,12 @@ import time
 import socket
 import sys
 
+
 cwd = os.getcwd()
 imgDir = cwd + '/images'
 imgPath = imgDir + '/'
+
+sockBuff = 4096
 
 global sz
 size = 2100000
