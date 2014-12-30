@@ -54,27 +54,33 @@ def requestImageName(sock):
 
     return name
 
+# this function takes in a socket and name argument, and requests the server for file of 'name' and stores it locally
+def requestImages(sock, name):
 
-def requestImage(sock, name):
-
-    f = open(name, 'w')
     sz = 0
     sock.send('img')
 
-    img = sock.recv(sockBuff)
+    res = sendRequest(sock, name)
 
-    sz += float(len(img))
-
-    while img != 'done':
-
-        f.write(img)
+    if res == 'yes':
+        f = open(name, 'w')
 
         img = sock.recv(sockBuff)
-        sz += float(len(img))
-        update_progress(sz/size)
 
-    f.close()
-    print 'Received image: ' + name
+        sz += float(len(img))
+
+        while img != 'done':
+
+            f.write(img)
+
+            img = sock.recv(sockBuff)
+            sz += float(len(img))
+            update_progress(sz/size)
+
+        f.close()
+        print 'Received image: ' + name
+    else:
+        print 'No file with name, ' + name + ', exists on drone.'
 
 
 def requestImageList(sock):
@@ -82,12 +88,9 @@ def requestImageList(sock):
     sock.send('list')
     name = sock.recv(sockBuff)
 
-    print name
-
     while name != 'done':
         files.append(name)
         name = sock.recv(sockBuff)
-        print name
 
     print 'Received file list.'
 
@@ -130,10 +133,9 @@ if rc == 0:
 
         requestImageList(s)
 
-        print files
-        print len(files)
+        filename = files[0]
 
-        # filename = requestImageName(s)
+        # recvFiles.append(filename)
         #
         # print filename
         #
@@ -141,7 +143,7 @@ if rc == 0:
         #
         # print size
 
-        # requestImage(s, filename)
+        requestImages(s, filename)
 
         re = sendRequest(s, 'close')
 

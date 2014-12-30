@@ -85,21 +85,30 @@ while True:
             print size
 
     if req == 'img':
-        with open(imgPath + name, 'r') as f:
-            for line in f:
-                if not line:
-                    break
 
-                conn.send(line)
+        name = conn.recv(sockBuff)
 
-                sz += float(len(line))
+        if files.__contains__(name):
+            conn.send('yes')
 
-                update_progress(sz/size)
+            with open(imgPath + name, 'r') as f:
+                for line in f:
+                    if not line:
+                        break
 
-        filesTrans = filesTrans.append(name)
-        fileCount -= 1
-        f.close()
-        conn.send('done')
+                    conn.send(line)
+
+                    sz += float(len(line))
+
+                    update_progress(sz/size)
+
+                files.remove(name)
+                fileCount -= 1
+                f.close()
+                conn.send('done')
+
+        else:
+            conn.send('no')
 
     if req == 'close':
         conn.send('closing')
