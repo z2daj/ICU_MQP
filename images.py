@@ -19,7 +19,7 @@ runTime = 60  # arbitrary capture time, should capture images for a minute
 sleepTime = 0.25  # sleep time for individual frame captures
 sockBuff = 4096
 
-sz = 0
+global sz
 size = 2100000
 
 #set up server socket for connections
@@ -86,10 +86,12 @@ while True:
 
     if req == 'img':
 
+        sz = 0
         name = conn.recv(sockBuff)
 
         if files.__contains__(name):
             conn.send('yes')
+            print 'yes'
 
             with open(imgPath + name, 'r') as f:
                 for line in f:
@@ -111,6 +113,7 @@ while True:
 
         else:
             conn.send('no')
+            print 'no'
 
     if req == 'close':
         conn.send('closing')
