@@ -77,6 +77,7 @@ def requestImages(sock, name):
 
             img = sock.recv(sockBuff)
 
+        sz = 0
         sys.stdout.flush()
         print 'Received image: ' + name
         f.close()

@@ -101,6 +101,7 @@ while True:
                     sz += float(len(line))
                     update_progress(sz/size)
 
+                sz = 0
                 sys.stdout.flush()
                 print 'File, ' + name + ', sent.'
                 files.remove(name)
