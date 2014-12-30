@@ -99,9 +99,10 @@ while True:
                     conn.send(line)
 
                     sz += float(len(line))
-
                     update_progress(sz/size)
 
+                sys.stdout.flush()
+                print 'File, ' + name + ', sent.'
                 files.remove(name)
                 fileCount -= 1
                 f.close()

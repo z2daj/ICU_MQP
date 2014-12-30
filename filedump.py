@@ -54,6 +54,7 @@ def requestImageName(sock):
 
     return name
 
+
 # this function takes in a socket and name argument, and requests the server for file of 'name' and stores it locally
 def requestImages(sock, name):
 
@@ -67,18 +68,18 @@ def requestImages(sock, name):
 
         img = sock.recv(sockBuff)
 
-        sz += float(len(img))
-
         while img != 'done':
 
             f.write(img)
 
-            img = sock.recv(sockBuff)
             sz += float(len(img))
             update_progress(sz/size)
 
-        f.close()
+            img = sock.recv(sockBuff)
+
+        sys.stdout.flush()
         print 'Received image: ' + name
+        f.close()
     else:
         print 'No file with name, ' + name + ', exists on drone.'
 
@@ -133,17 +134,10 @@ if rc == 0:
 
         requestImageList(s)
 
-        filename = files[0]
+        for filename in files:
+            requestImages(s, filename)
 
-        # recvFiles.append(filename)
-        #
-        # print filename
-        #
-        # size = int(sendRequest(s, 'size'))
-        #
-        # print size
-
-        requestImages(s, filename)
+        print 'Received all files.'
 
         re = sendRequest(s, 'close')
 
