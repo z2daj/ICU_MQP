@@ -1,9 +1,7 @@
 # this script connects to an open socket on the Pi and initiates image transfers
-# TODO: create directory for transfer results
-# TODO: create received files from filename and read in data to form complete image
 # TODO: do some kind of constant pinging of the server for dropped connection correction
-
-#TODO: write a general send request function, and perform necessary actions based on that return
+# TODO: make this easier to adapt for an object-oriented approach
+# TODO: write a general send request function, and perform necessary actions based on that return
 
 import os
 import sys
@@ -13,6 +11,8 @@ import re
 
 #setup some variables
 currDir = os.getcwd()
+resultsDir = currDir + '/resultImgs'
+resultsPath = resultsDir + '/'
 gsIP = '1.4.19.116'  # needs to be updated to actual GS IP, probably of the 192.168.1.x variety
 droneIP = '1.4.19.175'  # needs to be updated to actual drone IP
 regex = '([0-9./])'  # regular expression for parsing ping statistics from ping output
@@ -25,6 +25,15 @@ files = []
 #set up client socket for remote connection
 PORT = 5007
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+
+#this function takes in a directory and checks if it exists
+#and creates it if it doesn't
+def check_directory(dir):
+    if os.path.exists(dir):
+        print 'Result Directory exists at: ' + dir
+    else:
+        os.mkdir(dir)
 
 
 def update_progress(progress):
@@ -65,6 +74,8 @@ def requestImages(sock, name):
     res = sendRequest(sock, name)
 
     if res == 'yes':
+        # store in root for now to make debugging easier
+        # f = open(resultsPath + name, 'w')
         f = open(name, 'w')
 
         img = sock.recv(sockBuff)
@@ -105,6 +116,10 @@ def sendRequest(sock, req):
     ret = sock.recv(sockBuff)
 
     return ret
+
+
+#check if results directory exists
+check_directory(resultsDir)
 
 #ping the bastard to see if it's available, and grab the command output
 print 'Pinging Drone1...'
