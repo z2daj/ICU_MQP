@@ -72,7 +72,7 @@ def requestImages(sock, name):
     sock.send('img')
 
     res = sendRequest(sock, name)
-    size = s.recv(sockBuff)
+    size = float(s.recv(sockBuff))
     print size
 
     if res == 'yes':

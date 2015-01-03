@@ -93,7 +93,7 @@ while True:
         if files.__contains__(name):
             conn.send('yes')
             print 'yes'
-            conn.send(size)
+            conn.send(str(size))
             print 'size'
 
             with open(imgPath + name, 'r') as f:
