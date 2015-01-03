@@ -75,8 +75,8 @@ def requestImages(sock, name):
 
     if res == 'yes':
         # store in root for now to make debugging easier
-        # f = open(resultsPath + name, 'w')
-        f = open(name, 'w')
+        f = open(resultsPath + name, 'w')
+        # f = open(name, 'w')
 
         img = sock.recv(sockBuff)
 
@@ -153,9 +153,12 @@ if rc == 0:
 
         requestImageList(s)
 
-        for filename in files:
-            requestImages(s, filename)
-            files.remove(filename)
+        filename = files[0]
+        requestImages(s, filename)
+
+        # for filename in files:
+        #     requestImages(s, filename)
+        #     files.remove(filename)
 
         print 'Received all files.'
 

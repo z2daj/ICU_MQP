@@ -86,6 +86,7 @@ while True:
 
         sz = 0
         name = conn.recv(sockBuff)
+        size = os.path.getsize(name)
 
         if files.__contains__(name):
             conn.send('yes')
