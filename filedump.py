@@ -71,9 +71,10 @@ def requestImages(sock, name):
     sz = 0
     sock.send('img')
 
-    res = sendRequest(sock, name)
-    size = float(s.recv(sockBuff))
+    size = int(s.recv(sockBuff))
     print size
+
+    res = sendRequest(sock, name)
 
     if res == 'yes':
         # store in root for now to make debugging easier
@@ -155,12 +156,12 @@ if rc == 0:
 
         requestImageList(s)
 
-        filename = files[0]
-        requestImages(s, filename)
+        # filename = files[0]
+        # requestImages(s, filename)
 
-        # for filename in files:
-        #     requestImages(s, filename)
-        #     files.remove(filename)
+        for filename in files:
+            requestImages(s, filename)
+            files.remove(filename)
 
         print 'Received all files.'
 
