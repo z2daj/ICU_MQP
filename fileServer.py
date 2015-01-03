@@ -96,6 +96,8 @@ while True:
             conn.send(str(size))
             print 'size'
 
+            time.sleep(0.01)
+
             with open(imgPath + name, 'r') as f:
                 for line in f:
                     if not line:
