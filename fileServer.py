@@ -1,9 +1,9 @@
 # This python script will take a number of images based on desired time
 # and then store them in an 'images' directory
-# finally, for testing purposes, it will create a socketed connection through which these images will be transfered
-# to the groundstation
+# finally, for testing purposes, it will create a socket-ed connection through which these images will be transferred
+# to the ground-station
 # TODO: test logic for transferring files line by line.
-#
+# TODO: store lists of files transferred to separate file so same files aren't transferred in case of server crash
 
 import os
 import time
@@ -32,7 +32,7 @@ print 'Connected by: ', addr
 
 
 def update_progress(progress):
-    barLength = 10 # Modify this to change the length of the progress bar
+    barLength = 10  # Modify this to change the length of the progress bar
     status = ""
     if isinstance(progress, int):
         progress = float(progress)
@@ -112,6 +112,7 @@ while True:
                 files.remove(name)
                 fileCount -= 1
                 f.close()
+                time.sleep(0.01)
                 conn.send('done')
                 print 'done'
 
