@@ -72,6 +72,8 @@ def requestImages(sock, name):
     sock.send('img')
 
     res = sendRequest(sock, name)
+    size = s.recv(sockBuff)
+    print size
 
     if res == 'yes':
         # store in root for now to make debugging easier

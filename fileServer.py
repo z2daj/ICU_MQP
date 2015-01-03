@@ -93,6 +93,8 @@ while True:
         if files.__contains__(name):
             conn.send('yes')
             print 'yes'
+            conn.send(size)
+            print 'size'
 
             with open(imgPath + name, 'r') as f:
                 for line in f:
@@ -111,6 +113,7 @@ while True:
                 fileCount -= 1
                 f.close()
                 conn.send('done')
+                print 'done'
 
         else:
             conn.send('no')
