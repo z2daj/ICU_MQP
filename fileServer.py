@@ -86,7 +86,7 @@ while True:
 
         sz = 0
         name = conn.recv(sockBuff)
-        size = os.path.getsize(name)
+        size = os.path.getsize(imgPath+name)
 
         print size
 
