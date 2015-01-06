@@ -9,7 +9,7 @@ import time
 camera = picamera.PiCamera()
 cwd = os.getcwd()
 imgDir = cwd + '/images'
-runTime = 60  # arbitrary capture time, should capture images for a minute
+runTime = 1000  # arbitrary capture time, should capture images for a minute
 sleepTime = 0.1  # sleep time for individual frame captures
 
 #calculate number of frames needed to fill allotted time and round to nearest integer
