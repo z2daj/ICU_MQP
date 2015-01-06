@@ -158,10 +158,11 @@ if rc == 0:
         # filename = files[0]
         # requestImages(s, filename)
 
-        for filename in files:
-            print filename
-            requestImages(s, filename)
-            files.remove(filename)
+        while files.__len__():
+            for filename in files:
+                print filename
+                requestImages(s, filename)
+                files.remove(filename)
 
         print 'Received all files.'
 
