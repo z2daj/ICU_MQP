@@ -159,10 +159,13 @@ if rc == 0:
         # requestImages(s, filename)
 
         for filename in files:
+            print filename
             requestImages(s, filename)
             files.remove(filename)
 
         print 'Received all files.'
+
+        print files
 
         re = sendRequest(s, 'close')
 
