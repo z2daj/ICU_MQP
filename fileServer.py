@@ -72,7 +72,7 @@ while True:
             name += '\0'
             conn.send(name)
             print name
-            # time.sleep(0.05)  # wait for buffer to be received before sending next name
+            time.sleep(0.05)  # wait for buffer to be received before sending next name
 
         conn.send('done\0')
 
