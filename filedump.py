@@ -72,7 +72,7 @@ def requestImages(sock, name):
     sock.send('img\0')
 
     res = sendRequest(sock, name)
-    if res == 'yes':
+    if res == 'yes\0':
 
         sock.send('size?\0')
         size = int(s.recv(sockBuff))
@@ -86,7 +86,7 @@ def requestImages(sock, name):
 
         img = sock.recv(sockBuff)
 
-        while img != 'done':
+        while img != 'done\0':
 
             f.write(img)
 
