@@ -110,10 +110,10 @@ def requestImages(sock, name):
 
 def requestImageList(sock):
 
-    sock.send('list')
+    sock.send('list\0')
     name = sock.recv(sockBuff)
 
-    while name != 'done':
+    while name != 'done\0':
         files.append(name)
         name = sock.recv(sockBuff)
 
