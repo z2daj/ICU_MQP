@@ -118,6 +118,7 @@ while True:
                 sz = 0
                 sys.stdout.flush()
                 print 'File, ' + name + ', sent.'
+                os.remove(imgPath+name)
                 files.remove(name)
                 fileCount -= 1
                 f.close()
