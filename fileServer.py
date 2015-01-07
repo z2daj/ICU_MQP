@@ -18,9 +18,9 @@ imgPath = imgDir + '/'
 sockBuff = 4096
 
 global sz
-size = 2100000
+size = 0
 
-#set up server socket for connections
+# set up server socket for connections
 HOST = ''
 PORT = 5007
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
