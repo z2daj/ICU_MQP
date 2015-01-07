@@ -67,8 +67,7 @@ while True:
 
     if req == 'list\0':
         files = os.listdir(imgDir)
-        sz = 0
-        size = os.path.getsize(imgPath)
+        # size = os.path.getsize(imgPath)
 
         for name in files:
             conn.send(name)
@@ -86,9 +85,9 @@ while True:
 
     if req == 'img\0':
 
-        # sz = 0
+        sz = 0
         name = conn.recv(sockBuff)
-        # size = os.path.getsize(imgPath+name)
+        size = os.path.getsize(imgPath+name)
 
         print size
 
@@ -117,7 +116,7 @@ while True:
                     sz += float(len(line))
                     update_progress(sz/size)
 
-                # sz = 0
+                sz = 0
                 sys.stdout.flush()
                 print 'File, ' + name + ', sent.'
                 os.remove(imgPath+name)
