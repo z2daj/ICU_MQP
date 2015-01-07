@@ -160,26 +160,27 @@ if rc == 0:
 
         s.connect((droneIP, PORT))
 
-        requestImageList(s)
+        while True:
+            requestImageList(s)
 
-        # filename = files[0]
-        # requestImages(s, filename)
+            # filename = files[0]
+            # requestImages(s, filename)
 
-        while files.__len__():
-            for filename in files:
-                print filename
-                requestImages(s, filename)
-                files.remove(filename)
+            while files.__len__():
+                for filename in files:
+                    print filename
+                    requestImages(s, filename)
+                    files.remove(filename)
 
-        print 'Received all files.'
+            print 'Received all files.'
 
-        print files
+            print files
 
-        re = sendRequest(s, 'close')
+        re = sendRequest(s, 'close\0')
 
         print re
 
-        if re == 'closing':
+        if re == 'closing\0':
             s.shutdown(socket.SHUT_RDWR)
             s.close()
 
