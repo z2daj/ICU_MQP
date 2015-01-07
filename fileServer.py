@@ -69,7 +69,6 @@ while True:
         files = os.listdir(imgDir)
 
         for name in files:
-            name += '\0'
             conn.send(name)
             print name
             time.sleep(0.05)  # wait for buffer to be received before sending next name
