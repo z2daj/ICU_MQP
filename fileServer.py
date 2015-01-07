@@ -133,6 +133,7 @@ while True:
 
     if req == 'close\0':
         conn.send('closing\0')
+        os.listdir(imgPath)
         conn.shutdown(socket.SHUT_RDWR)
         conn.close()
         break
