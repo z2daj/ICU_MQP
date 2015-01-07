@@ -17,6 +17,7 @@ FRAMES = int(runTime * sleepTime)
 
 camera.resolution = (2592, 1944)
 
+
 # capture images to a specified output path with the timestamp as the filename
 def captureImage(outputPath):
     if os.path.exists(outputPath):
