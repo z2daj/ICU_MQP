@@ -14,7 +14,7 @@ currDir = os.getcwd()
 resultsDir = currDir + '/resultImgs'
 resultsPath = resultsDir + '/'
 gsIP = '1.4.19.116'  # needs to be updated to actual GS IP, probably of the 192.168.1.x variety
-droneIP = '1.4.19.175'  # needs to be updated to actual drone IP
+droneIP = '192.168.1.222'  # needs to be updated to actual drone IP
 regex = '([0-9./])'  # regular expression for parsing ping statistics from ping output
 sockBuff = 4096
 
@@ -59,7 +59,7 @@ def update_progress(progress):
 # method to request filename from server
 def requestImageName(sock):
 
-    sock.send('name')
+    sock.send('name\0')
     name = sock.recv(sockBuff)
 
     return name
@@ -69,13 +69,17 @@ def requestImageName(sock):
 def requestImages(sock, name):
 
     sz = 0
-    sock.send('img')
+    sock.send('img\0')
 
     res = sendRequest(sock, name)
-    size = int(s.recv(sockBuff))
-    print size
-
     if res == 'yes':
+
+        sock.send('size?\0')
+        size = int(s.recv(sockBuff))
+        print size
+
+        sock.send('img?\0')
+
         # store in root for now to make debugging easier
         f = open(resultsPath + name, 'w')
         # f = open(name, 'w')
@@ -97,8 +101,11 @@ def requestImages(sock, name):
         print 'Received image: ' + name
         f.close()
 
-    else:
+    elif res == 'no':
         print 'No file with name, ' + name + ', exists on drone.'
+
+    else:
+        print 'Shit'
 
 
 def requestImageList(sock):

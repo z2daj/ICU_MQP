@@ -65,24 +65,25 @@ while True:
 
     print req
 
-    if req == 'list':
+    if req == 'list\0':
         files = os.listdir(imgDir)
 
         for name in files:
+            name += '\0'
             conn.send(name)
             print name
-            time.sleep(0.05)  # wait for buffer to be received before sending next name
+            # time.sleep(0.05)  # wait for buffer to be received before sending next name
 
-        conn.send('done')
+        conn.send('done\0')
 
-    if req == 'size':
+    if req == 'size\0':
         with open(imgPath + name, 'r') as f:
 
             size = os.path.getsize(f.name)
             conn.send(str(size))
             print size
 
-    if req == 'img':
+    if req == 'img\0':
 
         sz = 0
         name = conn.recv(sockBuff)
@@ -91,12 +92,19 @@ while True:
         print size
 
         if files.__contains__(name):
-            conn.send('yes')
+            conn.send('yes\0')
             print 'yes'
-            conn.send(str(size))
+
+            while req != 'size?\0':
+                req = conn.recv(sockBuff)
+
+            conn.send(str(size)+'\0')
             print 'size'
 
-            time.sleep(0.01)
+            # time.sleep(0.01)
+
+            while req != 'img?\0':
+                req = conn.recv(sockBuff)
 
             with open(imgPath + name, 'r') as f:
                 for line in f:
@@ -114,16 +122,17 @@ while True:
                 files.remove(name)
                 fileCount -= 1
                 f.close()
-                time.sleep(0.01)
-                conn.send('done')
+                # time.sleep(0.01)
+
+                conn.send('done\0')
                 print 'done'
 
         else:
-            conn.send('no')
+            conn.send('no\0')
             print 'no'
 
-    if req == 'close':
-        conn.send('closing')
+    if req == 'close\0':
+        conn.send('closing\0')
         conn.shutdown(socket.SHUT_RDWR)
         conn.close()
         break
