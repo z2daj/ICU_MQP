@@ -97,7 +97,7 @@ while True:
             while req != 'size?\0':
                 req = conn.recv(sockBuff)
 
-            conn.send(str(size)+'\0')
+            conn.send(str(size))
             print 'size'
 
             # time.sleep(0.01)
