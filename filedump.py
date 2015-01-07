@@ -9,7 +9,7 @@ import socket
 import subprocess
 import re
 
-#setup some variables
+# setup some variables
 currDir = os.getcwd()
 resultsDir = currDir + '/resultImgs'
 resultsPath = resultsDir + '/'
@@ -22,13 +22,13 @@ size = 2100000
 global sz
 files = []
 
-#set up client socket for remote connection
+# set up client socket for remote connection
 PORT = 5007
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 
-#this function takes in a directory and checks if it exists
-#and creates it if it doesn't
+# this function takes in a directory and checks if it exists
+# and creates it if it doesn't
 def check_directory(dir):
     if os.path.exists(dir):
         print 'Result Directory exists at: ' + dir
