@@ -105,7 +105,7 @@ def requestImages(sock, name):
         print 'No file with name, ' + name + ', exists on drone.'
 
     else:
-        print 'Shit'
+        print 'Shit: '+res
 
 
 def requestImageList(sock):
