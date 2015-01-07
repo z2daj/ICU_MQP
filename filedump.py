@@ -56,7 +56,7 @@ def update_progress(progress):
     sys.stdout.flush()
 
 
-#method to request filename from server
+# method to request filename from server
 def requestImageName(sock):
 
     sock.send('name')
@@ -120,10 +120,10 @@ def sendRequest(sock, req):
     return ret
 
 
-#check if results directory exists
+# check if results directory exists
 check_directory(resultsDir)
 
-#ping the bastard to see if it's available, and grab the command output
+# ping the bastard to see if it's available, and grab the command output
 print 'Pinging Drone1...'
 p = subprocess.Popen(['ping', '-c', '3', droneIP], stdout=subprocess.PIPE)
 stdOutput, stdError = p.communicate()
@@ -132,17 +132,17 @@ rc = p.returncode
 if rc == 0:
     print('Drone1 with IP: %s is active' % droneIP)
 
-    #grab average ping - on the second to last line every time out of 9 line output (7)
+    # grab average ping - on the second to last line every time out of 9 line output (7)
     avgPingStr = stdOutput.splitlines()[7]
 
-    #perform regex to capture min/avg/max/std-dev ping statistics
+    # perform regex to capture min/avg/max/std-dev ping statistics
     reStr = re.findall(regex, avgPingStr)
     reStr = ''.join(reStr)
 
-    #separate out each entry delimited by '/' character
+    # separate out each entry delimited by '/' character
     reStr = reStr.split('/')
 
-    #grab the average ping result in ms
+    # grab the average ping result in ms
     avgPingStr = reStr[4]
     avgPing = float(avgPingStr)
 
