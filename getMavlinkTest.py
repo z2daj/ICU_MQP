@@ -36,12 +36,15 @@ mav = mavlinkv10.MAVLink(mavproxy_sock)
 print 'Le Data:'
 print data_from_mavproxy
 
-decoded_message = mav.decode(data_from_mavproxy)
+try:
+    decoded_message = mav.decode(data_from_mavproxy)
+except MAVError as e:
+    print e
 
 print 'Decoded Message:'
 print decoded_message
 
-#print('Got a message with id: %u, fields: %s, component: %d, System ID: %d' %(decoded_message.get_msgid(), decoded_message.get_fieldnames(), decoded_message.get_srcComponent(), decoded_message.get_srcSystem()))
+print('Got a message with id: %u, fields: %s, component: %d, System ID: %d' %(decoded_message.get_msgid(), decoded_message.get_fieldnames(), decoded_message.get_srcComponent(), decoded_message.get_srcSystem()))
 
 # Prints the entire decode message
-#print(decoded_message)
+print(decoded_message)
