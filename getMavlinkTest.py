@@ -33,9 +33,6 @@ mav = mavlinkv10.MAVLink(mavproxy_sock)
 # Call to receive data over UDP socket, 1024 is the buffer size
 (data_from_mavproxy, address_of_mavproxy) = mavproxy_sock.recvfrom(1024)
 
-print 'Le Data:'
-print data_from_mavproxy
-
 try:
     decoded_message = mav.decode(data_from_mavproxy)
 except MAVError as e:
