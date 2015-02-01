@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), '..
 
 # prepare for UDP connections and such
 HOST = ''
-mavproxy_port = 12345
+mavproxy_port = 14550
 
 # now create the damn mavlink server
 mavproxy_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -28,21 +28,11 @@ mavproxy_sock.bind((HOST, mavproxy_port))
 
 mav = mavlinkv10.MAVLink(mavproxy_sock)
 
-# set the WP_RADIUS parameter on the MAV at the end of the link
-mav.param_set_send(7, 1, "WP_RADIUS", 101)
+# Call to receive data over UDP socket, 1024 is the buffer size
+(data_from_mavproxy, address_of_mavproxy) = mavproxy_sock.recvfrom(1024)
+decoded_message = mav.decode(data_from_mavproxy)
 
-# alternatively, produce a MAVLink_param_set object
-# this can be sent via your own transport if you like
-m = mav.param_set_encode(7, 1, "WP_RADIUS", 101)
+print('Got a message with id: %u, fields: %s, component: %d, System ID: %d' %(decoded_message.get_msgid(), decoded_message.get_fieldnames(), decoded_message.get_srcComponent(), decoded_message.get_srcSystem()))
 
-# get the encoded message as a buffer
-b = m.get_msgbuf()
-
-# decode an incoming message
-m2 = mav.decode(b)
-
-# show what fields it has
-print("Got a message with id %u and fields %s" % (m2.get_msgId(), m2.get_fieldnames()))
-
-# print out the fields
-print(m2)
+# Prints the entire decode message
+print(decoded_message)
