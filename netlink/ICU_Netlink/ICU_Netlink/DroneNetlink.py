@@ -1,8 +1,6 @@
 import sys
 import time
-import DroneLinkDatagram
 from socket import *
-import cPickle as pickle
 
 print "starting up drone module"
 
@@ -17,11 +15,7 @@ tcpServer.listen(1)
 #set the blocking to none so that we can loop while waiting for UDP to find a client
 tcpServer.setblocking(0) 
 
-droneLink = DroneLinkDatagram.DroneLinkDatagram(tcpServer.getsockname(), "connect")
-
-print droneLink.getAddr()
-
-pdl = pickle.dumps(droneLink)
+tcpIncomingSocket = tcpServer.getsockname()[1]
 
 #start the UDP broadcast
 sock = socket(AF_INET, SOCK_DGRAM) 
@@ -32,7 +26,7 @@ sock.setsockopt(SOL_SOCKET, SO_BROADCAST, 1)
 print "waiting for incoming connection"
 trys = 0
 while not gsConnected:
-    sock.sendto(pdl, ('<broadcast>', gsListenPort))
+    sock.sendto(str(tcpIncomingSocket), ('<broadcast>', gsListenPort))
     time.sleep(1)
 
     try:
