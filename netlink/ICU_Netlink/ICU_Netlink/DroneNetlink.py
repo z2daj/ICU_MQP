@@ -12,8 +12,6 @@ gsConnected = False
 tcpServer = socket(AF_INET, SOCK_STREAM)
 tcpServer.bind(('', 0)) #allow the system to find the best network ip and socket
 tcpServer.listen(1)
-#set the blocking to none so that we can loop while waiting for UDP to find a client
-tcpServer.setblocking(0) 
 
 tcpIncomingSocket = tcpServer.getsockname()[1]
 
@@ -22,26 +20,37 @@ sock = socket(AF_INET, SOCK_DGRAM)
 sock.bind(('', 0))
 sock.setsockopt(SOL_SOCKET, SO_BROADCAST, 1)
 
-#loop until a connection is recived over tcp
-print "waiting for incoming connection"
-trys = 0
-while not gsConnected:
-    sock.sendto(str(tcpIncomingSocket), ('<broadcast>', gsListenPort))
-    time.sleep(1)
-
-    try:
-        conn, address = tcpServer.accept()
-    except:
-        print "no connection for loop: ", trys
-    else:
-        gsConnected = True
-    trys = trys + 1
-    
-#we have a connection, go into tx mode
-tcpServer.setblocking(1) 
+#loop forever in main part of program.
 while True:
-    conn.send(time.asctime())
-    time.sleep(1)
+    #loop until a connection is recived over tcp
+    print "waiting for incoming connection"
+    
+    #set the blocking to none so that we can loop while waiting for UDP to find a client
+    tcpServer.setblocking(0) 
+
+    trys = 0
+    while not gsConnected:
+        sock.sendto(str(tcpIncomingSocket), ('<broadcast>', gsListenPort))
+        time.sleep(1)
+
+        try:
+            conn, address = tcpServer.accept()
+        except:
+            print "no connection for loop: ", trys
+        else:
+            gsConnected = True
+            print "Connected to GS at:" + address[0]
+        trys = trys + 1
+    
+    #we have a connection, go into tx mode
+    tcpServer.setblocking(1) 
+    while gsConnected:
+        try:
+            conn.send(time.asctime())
+        except:
+            gsConnected = False
+        else:
+            time.sleep(1)
 
 conn.close()
     
