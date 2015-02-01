@@ -18,14 +18,14 @@ import mavlinkv10
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), '../../'))
 
 # prepare for UDP connections and such
-HOST = ''
+HOST = '127.0.0.1'
 mavproxy_port = 14550
 
 # now create the damn mavlink server
 mavproxy_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 mavproxy_sock.setblocking(0)
 mavproxy_sock.bind((HOST, mavproxy_port))
-mavproxy_sock.connect((HOST, mavproxy_port))
+# mavproxy_sock.connect((HOST, mavproxy_port))
 
 mav = mavlinkv10.MAVLink(mavproxy_sock)
 
