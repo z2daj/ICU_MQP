@@ -32,14 +32,14 @@ mav = mavlinkv10.MAVLink(mavproxy_sock)
 
 # Call to receive data over UDP socket, 1024 is the buffer size
 (data_from_mavproxy, address_of_mavproxy) = mavproxy_sock.recvfrom(1024)
+while True:
+    try:
+        decoded_message = mav.decode(data_from_mavproxy)
+    except MAVError as e:
+        print e
 
-try:
-    decoded_message = mav.decode(data_from_mavproxy)
-except MAVError as e:
-    print e
+    print('Got a message with id: %u, fields: %s, component: %d, System ID: %d' %(decoded_message.get_msgId(), decoded_message.get_fieldnames(), decoded_message.get_srcComponent(), decoded_message.get_srcSystem()))
 
-print('Got a message with id: %u, fields: %s, component: %d, System ID: %d' %(decoded_message.get_msgId(), decoded_message.get_fieldnames(), decoded_message.get_srcComponent(), decoded_message.get_srcSystem()))
-
-# Prints the entire decode message
-print 'Decoded Message: '
-print decoded_message
+    # Prints the entire decode message
+    print 'Decoded Message: '
+    print decoded_message
