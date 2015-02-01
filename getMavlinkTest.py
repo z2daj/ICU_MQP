@@ -20,6 +20,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), '..
 # prepare for UDP connections and such
 HOST = '127.0.0.1'
 mavproxy_port = 14550
+address_of_mavproxy = (HOST, mavproxy_port)
 
 # now create the damn mavlink server
 mavproxy_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
