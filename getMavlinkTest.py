@@ -24,8 +24,8 @@ address_of_mavproxy = (HOST, mavproxy_port)
 
 # now create the damn mavlink server
 mavproxy_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-mavproxy_sock.setblocking(0)
-mavproxy_sock.bind((HOST, mavproxy_port))
+# mavproxy_sock.setblocking(0)
+mavproxy_sock.bind('', 14550)
 # mavproxy_sock.connect((HOST, mavproxy_port))
 
 mav = mavlinkv10.MAVLink(mavproxy_sock)
