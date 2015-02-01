@@ -1,6 +1,7 @@
 import sys
-import time
 from socket import *
+import threading
+import time
 
 print('Starting up GS module')
 
@@ -12,26 +13,54 @@ udpListenSocket.bind(('', GSListenPort)) #not sure what to do if the system says
 
 heardFromDrone = False
 connectedDrones = []
+threadList = []
 
-print "starting UDP listen"
-while not heardFromDrone:
-    data, addr = udpListenSocket.recvfrom(1024) # buffer size is 1024 bytes. Note that this is a blocking operation.
+def handleDroneConnection(address):
+    try:
+        tcpListenSocket = socket(AF_INET, SOCK_STREAM)
+        tcpListenSocket.connect(address)
+    except:
+        connected = False
+        print "invalid connection."
+    else:
+        connected = True
+        print "connected to: " + str(tcpListenSocket.getpeername()[0])
+
+    while connected:
+        try:
+            data = tcpListenSocket.recv(1024)
+        except:
+            connectedDrones.remove(address)
+            connected = False
+        else:
+            print data + " from drone:" + address[0]
+
+        if len(data) == 0:
+            connected = False
+            print "connection to " + address[0] + " has been terminated on the drone side."
+
+def udpListen():
+    while True:
+        data, addr = udpListenSocket.recvfrom(1024) # buffer size is 1024 bytes. Note that this is a blocking operation.
+        
+        #addr has the correct ip, but the wrong port so we use the port sent in the UDP message. 
+        address = (addr[0], int(data))
     
-    #addr has the correct ip, but the wrong port so we use the port sent in the UDP message. 
-    address = (addr[0], int(data))
-    
-    if address not in connectedDrones:
-        heardFromDrone = True
-        connectedDrones.append(address)
-        print "message recived from a drone at address: " + address[0]
+        if address not in connectedDrones:
+            heardFromDrone = True
+            connectedDrones.append(address)
+            print "message recived from a drone at address: " + address[0]
+            t = threading.Thread(target=handleDroneConnection, name="drone:" + address[0], args=(address,))
+            t.start()
+            print "spawning new thread to handle drone data."
+        print "udp loop."
 
-#at this point we have heard from the drone and are ready to start a tcp link to the provided socket.
-tcpListenSocket = socket(AF_INET, SOCK_STREAM)
-tcpListenSocket.connect(address)
-
-print "connected to: " + str(tcpListenSocket.getpeername()[1])
-print "at address: " + str(tcpListenSocket.getsockname()[1])
+udpThread = threading.Thread(target=udpListen, name="udpListener", args=())
+print "starting the UDP listener."
+udpThread.start()
 
 while True:
-    data = tcpListenSocket.recv(1024)
-    print data
+    print "Drones connected = ", threading.active_count()-2
+    time.sleep(1)
+
+print "done"

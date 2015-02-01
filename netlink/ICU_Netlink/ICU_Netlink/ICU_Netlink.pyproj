@@ -22,7 +22,6 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="DroneLinkDatagram.py" />
     <Compile Include="DroneNetlink.py" />
     <Compile Include="GSNetlink.py" />
     <Compile Include="ICU_Netlink.py" />
