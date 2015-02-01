@@ -42,7 +42,7 @@ except MAVError as e:
     print e
 
 print 'Decoded Message:'
-print decoded_message
+print decoded_message.get_msgid()
 
 print('Got a message with id: %u, fields: %s, component: %d, System ID: %d' %(decoded_message.get_msgid(), decoded_message.get_fieldnames(), decoded_message.get_srcComponent(), decoded_message.get_srcSystem()))
 
