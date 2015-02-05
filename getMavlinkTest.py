@@ -79,7 +79,7 @@ while loopStat:
         print decoded_message
         loopStat = False
 
-    if ties == 500:
+    if tries == 500:
         loopStat = False
 
 gpsReq = True
