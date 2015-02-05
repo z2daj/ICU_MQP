@@ -49,6 +49,7 @@ print 'System ID: %d, Component: %d' % (tgt_system, tgt_component)
 print 'Moving into test loop...'
 
 loopStat = True
+tries = 0
 
 while loopStat:
 
@@ -56,6 +57,9 @@ while loopStat:
     decoded_message = mav.decode(data_from_mavproxy)
     # except MAVError as e:
     #     print e
+
+    if decoded_message:
+        tries += 1
 
     # some test code to see how to get GPS data from APM
     # see if it's broadcast and grab it if so
@@ -75,6 +79,8 @@ while loopStat:
         print decoded_message
         loopStat = False
 
+    if ties == 500:
+        loopStat = False
 
 gpsReq = True
 
