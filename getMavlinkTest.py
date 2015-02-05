@@ -19,7 +19,7 @@ tgt_system = 0
 tgt_component = 0
 
 # prepare for UDP connections and such
-HOST = '127.0.0.1'
+HOST = ''
 mavproxy_port = 14550
 address_of_mavproxy = (HOST, mavproxy_port)
 
