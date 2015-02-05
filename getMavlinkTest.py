@@ -87,7 +87,7 @@ gpsReq = True
 while gpsReq:
 
     # create an encoded DATA_STREAM_ENCODE message with stream ID 6 (MAV_DATA_STREAM_POSITION)
-    encoded_message = mav.data_stream_encode(6, 1, 1)
+    encoded_message = mav.request_data_stream_encode(1, 1, 6, 1, 1)
     mavproxy_sock.sendto(encoded_message, address_of_mavproxy)
 
     (data_from_mavproxy, address_of_mavproxy) = mavproxy_sock.recvfrom(1024)
