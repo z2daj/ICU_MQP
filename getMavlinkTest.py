@@ -48,7 +48,7 @@ print 'System ID: %d, Component: %d' % (tgt_system, tgt_component)
 
 print 'Moving into test loop...'
 
-loopStat = False
+loopStat = True
 
 while loopStat:
 
