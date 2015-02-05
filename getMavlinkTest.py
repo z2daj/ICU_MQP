@@ -34,10 +34,10 @@ mav = mavlinkv10.MAVLink(mavproxy_sock)
 # Call to receive data over UDP socket, 1024 is the buffer size
 (data_from_mavproxy, address_of_mavproxy) = mavproxy_sock.recvfrom(1024)
 
-try:
-    decoded_message = mav.decode(data_from_mavproxy)
-except MAVError as e:
-    print e
+# try:
+decoded_message = mav.decode(data_from_mavproxy)
+# except MAVError as e:
+#     print e
 
 # print('Got a message with id: %u, fields: %s, component: %d, System ID: %d' %(decoded_message.get_msgId(), decoded_message.get_fieldnames(), decoded_message.get_srcComponent(), decoded_message.get_srcSystem()))
 
@@ -48,19 +48,19 @@ print 'System ID: %d, Component: %d' % (tgt_system, tgt_component)
 
 print 'Moving into test loop...'
 
-loopStat = True
+loopStat = False
 
 while loopStat:
 
-    try:
-        decoded_message = mav.decode(data_from_mavproxy)
-    except MAVError as e:
-        print e
+    # try:
+    decoded_message = mav.decode(data_from_mavproxy)
+    # except MAVError as e:
+    #     print e
 
     # some test code to see how to get GPS data from APM
     # see if it's broadcast and grab it if so
     # first gets the raw GPS data
-    if decoded_message.get_msgId() == mavlinkv10.MAVLink_MSG_ID_GPS_RAW_INT:
+    if decoded_message.get_msgId() == mavlinkv10.MAVLink.MAVLink_MSG_ID_GPS_RAW_INT:
         print 'Received a GPS message'
         print('Got a message with id: %u, fields: %s, component: %d, System ID: %d' % (decoded_message.get_msgId(), decoded_message.get_fieldnames(), decoded_message.get_srcComponent(), decoded_message.get_srcSystem()))
         print 'Decoded Message: '
@@ -86,10 +86,10 @@ while gpsReq:
 
     (data_from_mavproxy, address_of_mavproxy) = mavproxy_sock.recvfrom(1024)
 
-    try:
-        decoded_message = mav.decode(data_from_mavproxy)
-    except MAVError as e:
-        print e
+    # try:
+    decoded_message = mav.decode(data_from_mavproxy)
+    # except MAVError as e:
+    #     print e
 
     print 'Received Data Stream: '
     print decoded_message
