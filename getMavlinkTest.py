@@ -74,10 +74,13 @@ while loopStat:
         print decoded_message.get_msgbuf()
 
         print 'payload: '
-        print mav.decode(decoded_message.get_payload())
+        print decoded_message.get_payload()
 
         print 'seq: '
         print decoded_message.get_seq()
+
+        print 'test: '
+        print decoded_message.lat
 
 
     # check for broadcast filtered GPS pose (fused GPS and accel), in GPS-frame format
