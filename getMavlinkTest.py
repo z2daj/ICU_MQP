@@ -59,7 +59,7 @@ while loopStat:
     # except MAVError as e:
     #     print e
 
-    IDs[tries] = decoded_message.get_msgId()
+    IDs.append(decoded_message.get_msgId())
     if decoded_message:
         tries += 1
 
