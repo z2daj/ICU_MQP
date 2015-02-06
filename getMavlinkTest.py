@@ -70,16 +70,10 @@ while loopStat:
         print 'Received a GPS message'
         print('Got a message with id: %u, fields: %s, component: %d, System ID: %d' % (decoded_message.get_msgId(), decoded_message.get_fieldnames(), decoded_message.get_srcComponent(), decoded_message.get_srcSystem()))
 
-        print 'msgbuf: '
-        print decoded_message.get_msgbuf()
+        print 'decoded message: '
+        print decoded_message
 
-        print 'payload: '
-        print decoded_message.get_payload()
-
-        print 'seq: '
-        print decoded_message.get_seq()
-
-        print 'test: '
+        print 'lat: '
         print decoded_message.lat
 
 
