@@ -84,15 +84,18 @@ while loopStat:
     #     print decoded_message
     #     loopStat = False
 
-    if tries == 500:
+    if tries == 50:
         loopStat = False
 
 # print 'Received These Message IDs: '
 # print gps
 #
-# gpsReq = True
-# # create an encoded DATA_STREAM_ENCODE message with stream ID 6 (MAV_DATA_STREAM_POSITION)
-# encoded_message = mav.request_data_stream_encode(1, 1, 6, 1, 1)
+gpsReq = True
+# create an encoded DATA_STREAM_ENCODE message with stream ID 6 (MAV_DATA_STREAM_POSITION)
+encoded_message = mav.request_data_stream_encode(1, 1, 6, 1, 1)
+
+print encoded_message
+
 # mavproxy_sock.sendto(encoded_message, address_of_mavproxy)
 #
 # while gpsReq:
