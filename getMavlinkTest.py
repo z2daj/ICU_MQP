@@ -11,7 +11,6 @@ d += '/mavlink/pymavlink'
 sys.path.append(d)
 
 import mavlinkv10
-import mavutil
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), '../../'))
 
