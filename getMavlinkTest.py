@@ -98,6 +98,7 @@ print encoded_message
 
 mavproxy_sock.sendto(encoded_message.get_msgbuf(), address_of_mavproxy)
 
+tries = 0
 while gpsReq:
 
     (data_from_mavproxy, address_of_mavproxy) = mavproxy_sock.recvfrom(1024)
@@ -107,6 +108,12 @@ while gpsReq:
     except Exception as e:
         pass
 
+    if decoded_message:
+        tries += 1
+        gps.append(decoded_message.get_msgId())
+
     print 'Received Data Stream: '
     print decoded_message
-    gpsReq = False
+
+    if tries == 50:
+        gpsReq = False
