@@ -30,7 +30,8 @@ mavproxy_sock.bind(address_of_mavproxy)
 # create a mavlink object which reads data from the mavproxy socket
 mav = mavlinkv10.MAVLink(mavproxy_sock)
 
-def getData():
+
+while True:
 
     att = True
     gps = True
@@ -60,18 +61,10 @@ def getData():
     pose = lat, lon, alt, pitch, roll, yaw
     time = gps_time, time_since_boot
 
-    data.append(pose)
-    data.append(time)
-
-    return data
-
-while True:
-
-    pose = getData()[0]
-    time = getData()[1]
-
     print 'Pose (lat, lon, alt, pitch, roll, yaw): ' % pose
     print 'Time (gps_usec, apm_boot_ms): ' % time
+
+
 
 
 
