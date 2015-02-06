@@ -117,3 +117,6 @@ while gpsReq:
 
     if tries == 50:
         gpsReq = False
+
+
+print gps
