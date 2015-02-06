@@ -70,16 +70,10 @@ while loopStat:
         print 'Received a GPS message'
         print('Got a message with id: %u, fields: %s, component: %d, System ID: %d' % (decoded_message.get_msgId(), decoded_message.get_fieldnames(), decoded_message.get_srcComponent(), decoded_message.get_srcSystem()))
 
-        fields = decoded_message.get_fieldnames()
-
-        for field in fields:
-            print 'Field: %s, Data: %d' % (field, decoded_message.field)
-
-        # print 'decoded message: '
-        # print decoded_message
-        #
-        # print 'lat: '
-        # print decoded_message.lat
+        print 'Time: %d' % decoded_message.time_usec
+        print 'Lat: %d' % decoded_message.lat
+        print 'Lon: %d' % decoded_message.lon
+        print 'Alt: %d' % decoded_message.alt
 
 
     # check for broadcast filtered GPS pose (fused GPS and accel), in GPS-frame format
