@@ -11,6 +11,7 @@ d += '/mavlink/pymavlink'
 sys.path.append(d)
 
 import mavlinkv10
+import mavutil
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), '../../'))
 
@@ -48,6 +49,7 @@ print 'System ID: %d, Component: %d' % (tgt_system, tgt_component)
 
 print 'Moving into test loop...'
 
+IDs = []
 loopStat = True
 tries = 0
 
@@ -58,6 +60,7 @@ while loopStat:
     # except MAVError as e:
     #     print e
 
+    IDs[tries] = decoded_message.get_msgId()
     if decoded_message:
         tries += 1
 
@@ -79,9 +82,11 @@ while loopStat:
         print decoded_message
         loopStat = False
 
-    if tries == 500:
+    if tries == 1000:
         loopStat = False
 
+print 'Received These Message IDs: '
+print IDs
 gpsReq = True
 
 while gpsReq:
