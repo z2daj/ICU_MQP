@@ -48,7 +48,7 @@ print 'System ID: %d, Component: %d' % (tgt_system, tgt_component)
 
 print 'Moving into test loop...'
 
-IDs = []
+gps = []
 loopStat = True
 tries = 0
 
@@ -60,33 +60,54 @@ while loopStat:
     except Exception:
         pass
 
-    IDs.append(decoded_message.get_msgId())
     if decoded_message:
         tries += 1
 
     # some test code to see how to get GPS data from APM
     # see if it's broadcast and grab it if so
     # first gets the raw GPS data
+    if decoded_message.get_msgId() == mavlinkv10.MAVLINK_MSG_ID_GPS_RAW_INT:
+        print 'Received a GPS message'
+        print('Got a message with id: %u, fields: %s, component: %d, System ID: %d' % (decoded_message.get_msgId(), decoded_message.get_fieldnames(), decoded_message.get_srcComponent(), decoded_message.get_srcSystem()))
 
-    # this works
+        print 'msgbuf: '
+        print decoded_message.get_msgbuf()
 
-    # if decoded_message.get_msgId() == mavlinkv10.MAVLINK_MSG_ID_GPS_RAW_INT:
-    #     print 'Received a GPS message'
+        print 'payload: '
+        print decoded_message.get_payload()
+
+        print 'seq: '
+        print decoded_message.get_seq()
+
+
+    # check for broadcast filtered GPS pose (fused GPS and accel), in GPS-frame format
+    # if decoded_message.get_msgId() == mavlinkv10.MAVLINK_MSG_ID_GLOBAL_POSITION_INT_COV:
+    #     print 'Received GPS position'
     #     print('Got a message with id: %u, fields: %s, component: %d, System ID: %d' % (decoded_message.get_msgId(), decoded_message.get_fieldnames(), decoded_message.get_srcComponent(), decoded_message.get_srcSystem()))
     #     print 'Decoded Message: '
     #     print decoded_message
     #     loopStat = False
 
-    # check for broadcast filtered GPS pose (fused GPS and accel), in GPS-frame format
-    if decoded_message.get_msgId() == mavlinkv10.MAVLINK_MSG_ID_GLOBAL_POSITION_INT_COV:
-        print 'Received GPS position'
-        print('Got a message with id: %u, fields: %s, component: %d, System ID: %d' % (decoded_message.get_msgId(), decoded_message.get_fieldnames(), decoded_message.get_srcComponent(), decoded_message.get_srcSystem()))
-        print 'Decoded Message: '
-        print decoded_message
+    if tries == 500:
         loopStat = False
 
-    if tries == 1000:
-        loopStat = False
-
-print 'Received These Message IDs: '
-print IDs
+# print 'Received These Message IDs: '
+# print gps
+#
+# gpsReq = True
+# # create an encoded DATA_STREAM_ENCODE message with stream ID 6 (MAV_DATA_STREAM_POSITION)
+# encoded_message = mav.request_data_stream_encode(1, 1, 6, 1, 1)
+# mavproxy_sock.sendto(encoded_message, address_of_mavproxy)
+#
+# while gpsReq:
+#
+#     (data_from_mavproxy, address_of_mavproxy) = mavproxy_sock.recvfrom(1024)
+#
+#     # try:
+#     decoded_message = mav.decode(data_from_mavproxy)
+#     # except MAVError as e:
+#     #     print e
+#
+#     print 'Received Data Stream: '
+#     print decoded_message
+#     gpsReq = False
