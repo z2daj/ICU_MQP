@@ -22,9 +22,36 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DroneData.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="droneMain.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="droneNetClass.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DroneNetlink.py" />
+    <Compile Include="fastPicam.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="gsMain.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="gsNetClass.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="GSNetlink.py" />
     <Compile Include="ICU_Netlink.py" />
+    <Compile Include="imageCapture.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="simDataCapture.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="simpycam.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

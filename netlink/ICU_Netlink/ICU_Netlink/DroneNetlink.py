@@ -1,3 +1,6 @@
+
+"""this is the ref file that works when run on it's own for net transfers.
+    it was used to define the functions in the droneNetClass"""
 import sys
 import time
 from socket import *

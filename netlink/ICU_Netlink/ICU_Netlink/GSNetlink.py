@@ -33,7 +33,7 @@ def handleDroneConnection(address):
             connectedDrones.remove(address)
             connected = False
         else:
-            print data + " from drone:" + address[0]
+            print data + "recived data from drone:" + address[0]
 
         if len(data) == 0:
             connected = False
