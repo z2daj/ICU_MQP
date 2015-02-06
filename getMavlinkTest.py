@@ -79,10 +79,11 @@ while loopStat:
         # print 'Received a Attitude message'
         # print('Got a message with id: %u, fields: %s, component: %d, System ID: %d' % (decoded_message.get_msgId(), decoded_message.get_fieldnames(), decoded_message.get_srcComponent(), decoded_message.get_srcSystem()))
 
-        print 'Time: %d' % decoded_message.time_boot_ms
-        print 'Roll: %d' % decoded_message.roll
-        print 'Pitch: %d' % decoded_message.pitch
-        print 'Yaw: %d' % decoded_message.yaw
+        print decoded_message
+        # print 'Time: %d' % decoded_message.time_boot_ms
+        # print 'Roll: %d' % decoded_message.roll
+        # print 'Pitch: %d' % decoded_message.pitch
+        # print 'Yaw: %d' % decoded_message.yaw
 
     if tries == 1000:
         loopStat = False
