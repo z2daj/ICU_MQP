@@ -74,7 +74,7 @@ while loopStat:
         print decoded_message.get_msgbuf()
 
         print 'payload: '
-        print decoded_message.get_payload()
+        print mav.decode(decoded_message.get_payload())
 
         print 'seq: '
         print decoded_message.get_seq()
