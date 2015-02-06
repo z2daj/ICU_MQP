@@ -46,6 +46,8 @@ while True:
         except Exception:
             pass
 
+        print decoded_message
+
         if decoded_message.get_msgId() == mavlinkv10.MAVLINK_MSG_ID_GPS_RAW_INT:
             print 'GPS Message Received.'
             gps_time = decoded_message.time_usec
