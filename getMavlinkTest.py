@@ -47,7 +47,7 @@ while True:
             pass
 
         if decoded_message.get_msgId() == mavlinkv10.MAVLINK_MSG_ID_GPS_RAW_INT and gps:
-            print 'GPS Message Received.'
+            # print 'GPS Message Received.'
             gps_time = decoded_message.time_usec
             lat = decoded_message.lat
             lon = decoded_message.lon
@@ -55,7 +55,7 @@ while True:
             gps = False
 
         if decoded_message.get_msgId() == mavlinkv10.MAVLINK_MSG_ID_ATTITUDE and att:
-            print 'Attitude Message Received.'
+            # print 'Attitude Message Received.'
             time_since_boot = decoded_message.time_boot_ms
             pitch = decoded_message.pitch
             roll = decoded_message.roll
