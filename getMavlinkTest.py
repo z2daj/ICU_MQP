@@ -75,14 +75,14 @@ while loopStat:
         print 'Lon: %d' % decoded_message.lon
         print 'Alt: %d' % decoded_message.alt
 
+    if decoded_message.get_msgId() == mavlinkv10.MAVLINK_MSG_ID_ATTITUDE:
+        print 'Received a Attitude message'
+        print('Got a message with id: %u, fields: %s, component: %d, System ID: %d' % (decoded_message.get_msgId(), decoded_message.get_fieldnames(), decoded_message.get_srcComponent(), decoded_message.get_srcSystem()))
 
-    # check for broadcast filtered GPS pose (fused GPS and accel), in GPS-frame format
-    # if decoded_message.get_msgId() == mavlinkv10.MAVLINK_MSG_ID_GLOBAL_POSITION_INT_COV:
-    #     print 'Received GPS position'
-    #     print('Got a message with id: %u, fields: %s, component: %d, System ID: %d' % (decoded_message.get_msgId(), decoded_message.get_fieldnames(), decoded_message.get_srcComponent(), decoded_message.get_srcSystem()))
-    #     print 'Decoded Message: '
-    #     print decoded_message
-    #     loopStat = False
+        print 'Time: %d' % decoded_message.time_boot_ms
+        print 'Roll: %d' % decoded_message.roll
+        print 'Pitch: %d' % decoded_message.pitch
+        print 'Yaw: %d' % decoded_message.yaw
 
     if tries == 50:
         loopStat = False
@@ -90,33 +90,33 @@ while loopStat:
 # print 'Received These Message IDs: '
 # print gps
 #
-gpsReq = True
-# create an encoded DATA_STREAM_ENCODE message with stream ID 6 (MAV_DATA_STREAM_POSITION)
-encoded_message = mav.request_data_stream_encode(1, 1, 6, 1, 1)
-
-print encoded_message
-
-mavproxy_sock.sendto(encoded_message.get_msgbuf(), address_of_mavproxy)
-
-tries = 0
-while gpsReq:
-
-    (data_from_mavproxy, address_of_mavproxy) = mavproxy_sock.recvfrom(1024)
-
-    try:
-        decoded_message = mav.decode(data_from_mavproxy)
-    except Exception as e:
-        pass
-
-    if decoded_message:
-        tries += 1
-        gps.append(decoded_message.get_msgId())
-
-    print 'Received Data Stream: '
-    print decoded_message
-
-    if tries == 50:
-        gpsReq = False
-
-
-print gps
+# gpsReq = True
+# # create an encoded DATA_STREAM_ENCODE message with stream ID 6 (MAV_DATA_STREAM_POSITION)
+# encoded_message = mav.request_data_stream_encode(1, 1, 6, 1, 1)
+#
+# print encoded_message
+#
+# mavproxy_sock.sendto(encoded_message.get_msgbuf(), address_of_mavproxy)
+#
+# tries = 0
+# while gpsReq:
+#
+#     (data_from_mavproxy, address_of_mavproxy) = mavproxy_sock.recvfrom(1024)
+#
+#     try:
+#         decoded_message = mav.decode(data_from_mavproxy)
+#     except Exception as e:
+#         pass
+#
+#     if decoded_message:
+#         tries += 1
+#         gps.append(decoded_message.get_msgId())
+#
+#     print 'Received Data Stream: '
+#     print decoded_message
+#
+#     if tries == 50:
+#         gpsReq = False
+#
+#
+# print gps
