@@ -46,8 +46,6 @@ while True:
         except Exception:
             pass
 
-        print decoded_message
-
         if decoded_message.get_msgId() == mavlinkv10.MAVLINK_MSG_ID_GPS_RAW_INT and gps:
             print 'GPS Message Received.'
             gps_time = decoded_message.time_usec
@@ -67,8 +65,11 @@ while True:
     pose = lat, lon, alt, pitch, roll, yaw
     time = gps_time, time_since_boot
 
-    print 'Pose (lat, lon, alt, pitch, roll, yaw): ' % pose
-    print 'Time (gps_usec, apm_boot_ms): ' % time
+    print 'Pose (lat, lon, alt, pitch, roll, yaw): '
+    print pose
+
+    print 'Time (gps_usec, apm_boot_ms): '
+    print time
 
 
 
