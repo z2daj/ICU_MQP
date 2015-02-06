@@ -41,10 +41,10 @@ while True:
 
         (data_from_mavproxy, address_of_mavproxy) = mavproxy_sock.recvfrom(1024)
 
-        try:
-            decoded_message = mav.decode(data_from_mavproxy)
-        except Exception:
-            pass
+        # try:
+        decoded_message = mav.decode(data_from_mavproxy)
+        # except Exception:
+            # pass
 
         if decoded_message.get_msgId() == mavlinkv10.MAVLINK_MSG_ID_GPS_RAW_INT and gps:
             # print 'GPS Message Received.'
