@@ -66,14 +66,14 @@ while loopStat:
     # some test code to see how to get GPS data from APM
     # see if it's broadcast and grab it if so
     # first gets the raw GPS data
-    if decoded_message.get_msgId() == mavlinkv10.MAVLINK_MSG_ID_GPS_RAW_INT:
+    # if decoded_message.get_msgId() == mavlinkv10.MAVLINK_MSG_ID_GPS_RAW_INT:
         # print 'Received a GPS message'
         # print('Got a message with id: %u, fields: %s, component: %d, System ID: %d' % (decoded_message.get_msgId(), decoded_message.get_fieldnames(), decoded_message.get_srcComponent(), decoded_message.get_srcSystem()))
 
-        print 'Time: %d' % decoded_message.time_usec
-        print 'Lat: %d' % decoded_message.lat
-        print 'Lon: %d' % decoded_message.lon
-        print 'Alt: %d' % decoded_message.alt
+        # print 'Time: %d' % decoded_message.time_usec
+        # print 'Lat: %d' % decoded_message.lat
+        # print 'Lon: %d' % decoded_message.lon
+        # print 'Alt: %d' % decoded_message.alt
 
     if decoded_message.get_msgId() == mavlinkv10.MAVLINK_MSG_ID_ATTITUDE:
         # print 'Received a Attitude message'
