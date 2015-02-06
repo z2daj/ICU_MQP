@@ -37,7 +37,7 @@ while True:
     gps = True
     data = []
 
-    while att and gps:
+    while att or gps:
 
         (data_from_mavproxy, address_of_mavproxy) = mavproxy_sock.recvfrom(1024)
 
@@ -48,7 +48,7 @@ while True:
 
         print decoded_message
 
-        if decoded_message.get_msgId() == mavlinkv10.MAVLINK_MSG_ID_GPS_RAW_INT:
+        if decoded_message.get_msgId() == mavlinkv10.MAVLINK_MSG_ID_GPS_RAW_INT and gps:
             print 'GPS Message Received.'
             gps_time = decoded_message.time_usec
             lat = decoded_message.lat
@@ -56,7 +56,7 @@ while True:
             alt = decoded_message.alt
             gps = False
 
-        if decoded_message.get_msgId() == mavlinkv10.MAVLINK_MSG_ID_ATTITUDE:
+        if decoded_message.get_msgId() == mavlinkv10.MAVLINK_MSG_ID_ATTITUDE and att:
             print 'Attitude Message Received.'
             time_since_boot = decoded_message.time_boot_ms
             pitch = decoded_message.pitch
