@@ -46,26 +46,30 @@ class dataCapture(object):
         gps = True
         data = []
 
-        while att and gps:
+        while att or gps:
+
+            (data_from_mavproxy, address_of_mavproxy) = mavproxy_sock.recvfrom(1024)
+
             try:
-                (data_from_mavproxy, address_of_mavproxy) = mavproxy_sock.recvfrom(1024)
                 decoded_message = self.mav.decode(data_from_mavproxy)
-            except Exception:
+            except mavlinkv10.MAVError:
                 pass
 
-            if decoded_message.get_msgId() == mavlinkv10.MAVLINK_MSG_ID_GPS_RAW_INT and gps:
-                gps_time = decoded_message.time_usec
-                lat = decoded_message.lat
-                lon = decoded_message.lon
-                alt = decoded_message.alt
-                gps = False
+            if decoded_message:
 
-            if decoded_message.get_msgId() == mavlinkv10.MAVLINK_MSG_ID_ATTITUDE and att:
-                time_since_boot = decoded_message.time_boot_ms
-                pitch = decoded_message.pitch
-                roll = decoded_message.roll
-                yaw = decoded_message.yaw
-                att = False
+                if decoded_message.get_msgId() == mavlinkv10.MAVLINK_MSG_ID_GPS_RAW_INT and gps:
+                    gps_time = decoded_message.time_usec
+                    lat = decoded_message.lat
+                    lon = decoded_message.lon
+                    alt = decoded_message.alt
+                    gps = False
+
+                if decoded_message.get_msgId() == mavlinkv10.MAVLINK_MSG_ID_ATTITUDE and att:
+                    time_since_boot = decoded_message.time_boot_ms
+                    pitch = decoded_message.pitch
+                    roll = decoded_message.roll
+                    yaw = decoded_message.yaw
+                    att = False
 
         pose = lat, lon, alt, pitch, roll, yaw
         time = gps_time, time_since_boot
