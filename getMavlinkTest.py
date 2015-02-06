@@ -54,11 +54,11 @@ tries = 0
 
 while loopStat:
 
-    # try:
-    (data_from_mavproxy, address_of_mavproxy) = mavproxy_sock.recvfrom(1024)
-    decoded_message = mav.decode(data_from_mavproxy)
-    # except MAVError as e:
-    #     print e
+    try:
+        (data_from_mavproxy, address_of_mavproxy) = mavproxy_sock.recvfrom(1024)
+        decoded_message = mav.decode(data_from_mavproxy)
+    except MAVError as e:
+        print e
 
     IDs.append(decoded_message.get_msgId())
     if decoded_message:
