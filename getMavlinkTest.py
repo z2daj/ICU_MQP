@@ -30,6 +30,15 @@ mavproxy_sock.bind(address_of_mavproxy)
 # create a mavlink object which reads data from the mavproxy socket
 mav = mavlinkv10.MAVLink(mavproxy_sock)
 
+lat = 0
+lon = 0
+alt = 0
+pitch = 0
+roll = 0
+yaw = 0
+gps_time = 0
+time_since_boot = 0
+
 
 while True:
 
@@ -44,7 +53,7 @@ while True:
         try:
             decoded_message = mav.decode(data_from_mavproxy)
         except mavlinkv10.MAVError as e:
-            print e
+            pass
 
         if decoded_message.get_msgId() == mavlinkv10.MAVLINK_MSG_ID_GPS_RAW_INT and gps:
             # print 'GPS Message Received.'
