@@ -93,8 +93,10 @@ while loopStat:
 gpsReq = True
 # create an encoded DATA_STREAM_ENCODE message with stream ID 6 (MAV_DATA_STREAM_POSITION)
 encoded_message = mav.request_data_stream_encode(1, 1, 6, 1, 1)
+enc_msg = mav.request_data_stream_send(1, 1, 6, 1, 1)
 
 print encoded_message
+print enc_msg
 
 # mavproxy_sock.sendto(encoded_message, address_of_mavproxy)
 #
