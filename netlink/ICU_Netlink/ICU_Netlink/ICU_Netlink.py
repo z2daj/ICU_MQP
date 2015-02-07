@@ -13,6 +13,14 @@ import pickle
 #else:#use unix style
 #    filename = filename + '/img/test.jpg'
 
+#setup the image capture thread.
+cameraPath = os.path.dirname(__file__) 
+if os.name == 'nt':#use windows style
+    cameraPath = cameraPath + '\\img\\test.jpg'
+else:#use unix style
+    cameraPath = cameraPath + '/img/test.jpg'
+capture = imageCapture.imageCapture(cameraPath)
+
 
 #test file right and read.
 data = ("some data", 12, 123121.23123)

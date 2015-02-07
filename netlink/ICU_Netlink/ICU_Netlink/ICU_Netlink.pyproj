@@ -22,9 +22,6 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="diskBuffer.py">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="DroneData.py">
       <SubType>Code</SubType>
     </Compile>

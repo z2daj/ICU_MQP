@@ -13,23 +13,22 @@ class simDataCapture(object):
 
     def getData(self):
         while True:
-            print "getting sample"
             pose = (r.randint(-128, 128), r.randint(-128, 128), r.randint(-128, 128), r.randint(-128, 128), r.randint(-128, 128), r.randint(-128, 128))
             gpsTime = time.time()
             sysTime = time.time()
             sample = (pose, gpsTime, sysTime)
             self.samples.append(sample)
-            print "sample saved to list"
             time.sleep(r.random())
 
     def getNextSample(self):
-        return self.samples[0] #return the oldest sample
+        return self.samples.pop() #return a sample
 
     def getClosestSample(self, time):#this should eventually trim the data.
-        return min(self.samples, key=lambda x:abs(x[2] - time))
+        sample = min(self.samples, key=lambda x:abs(x[2] - time))
+        self.samples.remove(sample)
+        return sample
 
     def __init__(self):
         dataThread = threading.Thread(target=self.getData, name="dataGen", args=())
         print "spawning data thread"
         dataThread.start()
-        print "data thread started"

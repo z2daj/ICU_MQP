@@ -49,10 +49,12 @@ class droneNetClass(object):
     def send(self, data):
         try:
             self.connection.send(data)
+            #print "data sent"
             return 1
         except:
             self.gsConnected = False
             self.connect()
+            #print "send failed, retrying connection"
             return 0
 
     def close(self):

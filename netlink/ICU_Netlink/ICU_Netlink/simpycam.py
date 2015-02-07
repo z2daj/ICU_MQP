@@ -10,7 +10,6 @@ class simpycam(object):
         try:
             with io.open(path, 'rb') as file:
                 self.buffer = file.read()
-                file.close()
         except:
             print "path: %s does not esist." % path
 

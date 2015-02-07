@@ -12,9 +12,7 @@ else:#use unix style
 
 network = gsNetClass.gsNetClass()
 
-
 while True:
     if network.numData() > 0:
         data = network.getData()
-        print data
-    time.sleep(0.25)
+        print "data recived"
