@@ -4,37 +4,25 @@ import simDataCapture
 import io
 import simpycam
 import os
+import pickle
 
-#note that unix uses this format instead: /img/test.jpg
-filename = os.path.dirname(__file__) + '\\img\\test.jpg'
-camera = simpycam.simpycam(filename)
 
-image = camera.capture()
+#filename = os.path.dirname(__file__) 
+#if os.name == 'nt':#use windows style
+#    filename = filename + '\\img\\test.jpg'
+#else:#use unix style
+#    filename = filename + '/img/test.jpg'
 
-mavData = simDataCapture.simDataCapture()
 
-data = DroneData.DroneData()
+#test file right and read.
+data = ("some data", 12, 123121.23123)
 
-data.gpsTime = 10
-
-#stream = data.serialize()
-stream = data.serialize()
-
-#data2 = DroneData.DroneData()
-data2 = DroneData.DroneData()
-data2.deserialize(stream)
-
-with io.open('data2img.jpg', 'wb') as file:
-    file.write(data2.image)
-
-#file io testing
-a = "this is a test for write."
-b = "cantalope"
-with io.open('testfile.txt', 'wb') as file:
-    file.writelines(a)
+with io.open("filename.txt", 'wb') as file:
+    pickle.dump(data, file)
     file.close()
 
-with io.open('testfile.txt', 'ab') as file:
-    file.writelines(b)
+with io.open("filename.txt", 'rb') as file:
+    newData = pickle.load(file)
     file.close()
-    
+
+print data == newData

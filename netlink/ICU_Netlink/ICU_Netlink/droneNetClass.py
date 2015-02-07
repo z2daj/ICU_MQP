@@ -15,7 +15,7 @@ class droneNetClass(object):
     gsConnected = False
     
     tcpServer = socket(AF_INET, SOCK_STREAM)
-    sock = socket(AF_INET, SOCK_DGRAM) 
+    udpSock = socket(AF_INET, SOCK_DGRAM)
 
     #function that starts the network services and sets up the connection to the GS
     def __init__(self):
@@ -26,12 +26,13 @@ class droneNetClass(object):
         self.tcpIncomingSocket = self.tcpServer.getsockname()[1]
 
         #start the UDP broadcast
-        self.sock.bind(('', 0))
-        self.sock.setsockopt(SOL_SOCKET, SO_BROADCAST, 1)
+        self.udpSock.bind(('', 0))
+        self.udpSock.setsockopt(SOL_SOCKET, SO_BROADCAST, 1)
     
     #try to connect, return false if unable to do so. 
     def connect(self):
-        self.sock.sendto(str(self.tcpIncomingSocket), ('<broadcast>', self.gsListenPort))
+        self.tcpServer.setblocking(0)
+        self.udpSock.sendto(str(self.tcpIncomingSocket), ('<broadcast>', self.gsListenPort))
         try:
             conn, address = self.tcpServer.accept()
         except:
@@ -39,25 +40,23 @@ class droneNetClass(object):
         else:
             self.gsConnected = True
             print "Connected to GS at:" + address[0]
-            return conn
+            self.connection = conn
 
     #Given a connection, start sending data.
     """takes a connection and serial data to send.
     return an error if connection is not valid.
     return 1 if data sent."""
-    def send(self, conn, data):
+    def send(self, data):
         try:
-            conn.send(data)
+            self.connection.send(data)
+            return 1
         except:
             self.gsConnected = False
+            self.connect()
             return 0
-        else:
-            return 1
-    
-    def close(self, conn):
+
+    def close(self):
         try:
-            conn.close()
+            self.connection.close()
         except:
-            return 0
-        else:
-            return 1
+            print "something went wrong when closing the socket"

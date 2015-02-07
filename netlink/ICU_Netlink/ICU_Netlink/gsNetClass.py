@@ -2,6 +2,8 @@ import sys
 from socket import *
 import threading
 import time
+
+
 from collections import deque
 
 class gsNetClass(object):
@@ -12,7 +14,6 @@ class gsNetClass(object):
     udpListenSocket = socket(AF_INET, SOCK_DGRAM)
     udpListenSocket.bind(('', GSListenPort)) #not sure what to do if the system says this is busy.
 
-    heardFromDrone = False
     connectedDrones = []
 
     #list of all the the drone that has been recived from ALL drones, but has not been processed yet.
@@ -30,19 +31,16 @@ class gsNetClass(object):
             print "connected to: " + str(tcpListenSocket.getpeername()[0])
 
         while connected:
-            time.sleep(0.1)
             try:
                 #this should be a drone data object
-                data = tcpListenSocket.recv(1024)
+                data = tcpListenSocket.recv(4094)
+                print "recived data from drone:" + address[0]
+                self.droneDataQueue.append((data, address[0]))
             except:
                 print "connection lost"
                 self.connectedDrones.remove(address)
                 connected = False
             else:
-                print "recived data from drone:" + address[0]
-                with self.droneDataQueue as q:
-                    q.append((data, address[0]))
-
                 if len(data) == 0:
                     connected = False
                     print "connection to " + address[0] + " has been terminated on the drone side."
@@ -55,13 +53,12 @@ class gsNetClass(object):
             address = (addr[0], int(data))
     
             if address not in self.connectedDrones:
-                self.heardFromDrone = True
                 self.connectedDrones.append(address)
                 print "message recived from a drone at address: " + address[0]
                 t = threading.Thread(target=self.handleDroneConnection, name="drone:" + address[0], args=(address,))
                 t.start()
                 print "spawning new thread to handle drone data."
-            print "udp loop."
+            time.sleep(0.1)
 
     def __init__(self):
         udpThread = threading.Thread(target=self.udpListen, name="udpListener", args=())

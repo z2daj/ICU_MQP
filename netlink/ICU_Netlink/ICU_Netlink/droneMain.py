@@ -1,60 +1,52 @@
-import DroneData
 import droneNetClass
-import imageCapture
-import simDataCapture
 import io
 import os
+import time
 from collections import deque
+import cPickle as pickle
 
-dataQueue = deque() #if this gets too long we need to start buffering to disk.
-
-filename = os.path.dirname(__file__) 
-if os.name == 'nt':
-    filename = filename + '\\img\\test.jpg'
-else:
-    filename = filename + '/img/test.jpg'
+dataq = deque() #dataStream
+backlog = deque() #filename
 
 #setup the groundstation connection
-print "setting up network"
 network = droneNetClass.droneNetClass()
-while not network.gsConnected:
-    connection = network.connect()
-print "network connected to:"
 
-#spawn the image collection thread(s)
-print "starting image capture"
-capture = imageCapture.imageCapture(filename)
-
-#spawn the data collection thread(s)
-print "starting data capture"
-mavData = simDataCapture.simDataCapture()
+#send the data if network connected, save to disk otherwise
+def sendData(someData):
+    if not network.send(data):
+        #the send failed, save the data for later 
+        filename = str(time.time()) + ".dronedata"
+        with io.open(filename, 'wb') as file:
+            pickle.dump(data, file)
+        backlog.append(filename)
+        print "sample added to backlog, length now:" + str(len(backlog))
+    else:
+        print "sample sent"
 
 #now that we have that out of the way, we can start working
 #on the main program loop.
+lastTime = 0
+lastOldTime = 0
 while True:
-    if capture.hasImage():
-        print "getting image"
-        image = capture.getImage() #image is (time_as_float , image_as_ByteIO) tuple
-        
-        print "geting data"
-        data = mavData.getClosestSample(image[0])
-
-        print "packaging"
-        droneDataPacket = DroneData.DroneData()
-        droneDataPacket.load(data[0], data[1], data[2], image[1])
-
-        print "serializing"
-        dataStream = droneDataPacket.serialize()
-
-        #save the data to the disk in case connection is lost.
-        dataName = str(time.time()) + ".datapacket"
-        with io.open(dataName, 'wb') as file:
-            file.write(dataStream)
-            file.close()
-
+    #add a new datapoint to the queue every second
+    if time.time() - lastTime > 1:
+        lastTime = time.time()
+        dataq.append(time.asctime())
+    
     #send that data over the network / save to disk if no connection
-    if network.gsConnected:
-        network.send(connection, dataStream)
-    else:
-        while not network.gsConnected:
-            connection = network.connect()
+    if len(dataq):
+        data = dataq.popleft()
+        sendData(data)
+    
+    if len(backlog) and network.gsConnected and (time.time()-lastOldTime) > 0.5:
+        lastOldTime = time.time()
+        filename = backlog.popleft()
+        #load the contents of the backlog into memory
+        with io.open(filename, 'rb') as file:
+            oldData = pickle.load(file)
+        os.remove(filename)#delete the old file from disk
+        #print "send old data:" + oldData
+        #sendData(oldData)
+
+        print "add old to queue:" + oldData 
+        dataq.append(oldData)
