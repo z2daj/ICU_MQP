@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>701a9b2f-8e0e-4ab6-b80c-3dea1e67d853</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>ICU_Netlink.py</StartupFile>
+    <StartupFile>droneMain.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -22,6 +22,9 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="diskBuffer.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DroneData.py">
       <SubType>Code</SubType>
     </Compile>

@@ -30,10 +30,12 @@ class gsNetClass(object):
             print "connected to: " + str(tcpListenSocket.getpeername()[0])
 
         while connected:
+            time.sleep(0.1)
             try:
                 #this should be a drone data object
                 data = tcpListenSocket.recv(1024)
             except:
+                print "connection lost"
                 self.connectedDrones.remove(address)
                 connected = False
             else:
@@ -41,9 +43,9 @@ class gsNetClass(object):
                 with self.droneDataQueue as q:
                     q.append((data, address[0]))
 
-            if len(data) == 0:
-                connected = False
-                print "connection to " + address[0] + " has been terminated on the drone side."
+                if len(data) == 0:
+                    connected = False
+                    print "connection to " + address[0] + " has been terminated on the drone side."
 
     def udpListen(self):
         while True:

@@ -23,7 +23,7 @@ class droneNetClass(object):
         self.tcpServer.bind(('', 0)) #allow the system to find the best network ip and socket
         self.tcpServer.listen(1)
 
-        tcpIncomingSocket = tcpServer.getsockname()[1]
+        self.tcpIncomingSocket = self.tcpServer.getsockname()[1]
 
         #start the UDP broadcast
         self.sock.bind(('', 0))
@@ -31,9 +31,9 @@ class droneNetClass(object):
     
     #try to connect, return false if unable to do so. 
     def connect(self):
-        self.sock.sendto(str(tcpIncomingSocket), ('<broadcast>', gsListenPort))
+        self.sock.sendto(str(self.tcpIncomingSocket), ('<broadcast>', self.gsListenPort))
         try:
-            conn, address = tcpServer.accept()
+            conn, address = self.tcpServer.accept()
         except:
             print "no connection"
         else:
@@ -45,16 +45,16 @@ class droneNetClass(object):
     """takes a connection and serial data to send.
     return an error if connection is not valid.
     return 1 if data sent."""
-    def send(conn, data):
+    def send(self, conn, data):
         try:
             conn.send(data)
         except:
-            gsConnected = False
+            self.gsConnected = False
             return 0
         else:
             return 1
     
-    def close(conn):
+    def close(self, conn):
         try:
             conn.close()
         except:

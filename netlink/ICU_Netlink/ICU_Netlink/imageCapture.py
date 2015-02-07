@@ -10,7 +10,7 @@ class imageCapture(object):
 
     """encdodes data in the format of (time_as_float , image_as_ByteIO)"""
     imageq = deque(maxlen = 10) #about 25MB of ram used for this...
-    
+
     """"this should be run in its own thread."""
     def captureToQ(self):
         camera = simpycam.simpycam()
@@ -18,11 +18,17 @@ class imageCapture(object):
         while True:#this module should run until shutdown by master.
             time.sleep(0.75) #sleep for 3/4 of a second to simulate the picam
             self.imageq.append((time.time(), buf))
+            print "image added to queue at position:" + str(len(imageq))
 
     def getImage(self):
         """returns a (time_as_float , image_as_ByteIO) tuple"""
         return self.imageq.popleft()
+    
+    def hasImage(self):
+        return len(self.imageq) > 0
 
-    def __init__(self):
+    def __init__(self, filename):
+        self.filename = filename
+        print "starting capture thread"
         captureThread = threading.Thread(target=self.captureToQ, name="imageCaptureThread", args=())
         print "started capture"

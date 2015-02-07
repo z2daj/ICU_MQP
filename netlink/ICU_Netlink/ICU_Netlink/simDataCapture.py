@@ -13,11 +13,13 @@ class simDataCapture(object):
 
     def getData(self):
         while True:
-            pose = (r.randint(), r.randint(), r.randint(), r.randint(), r.randint(), r.randint())
+            print "getting sample"
+            pose = (r.randint(-128, 128), r.randint(-128, 128), r.randint(-128, 128), r.randint(-128, 128), r.randint(-128, 128), r.randint(-128, 128))
             gpsTime = time.time()
-            systime = time.time()
-            sample = (pose, gpstime, systime)
+            sysTime = time.time()
+            sample = (pose, gpsTime, sysTime)
             self.samples.append(sample)
+            print "sample saved to list"
             time.sleep(r.random())
 
     def getNextSample(self):
@@ -27,7 +29,7 @@ class simDataCapture(object):
         return min(self.samples, key=lambda x:abs(x[2] - time))
 
     def __init__(self):
-        dataThread = threading.Thread(target=self.getData, name="dataGen", args=(self))
+        dataThread = threading.Thread(target=self.getData, name="dataGen", args=())
         print "spawning data thread"
         dataThread.start()
         print "data thread started"

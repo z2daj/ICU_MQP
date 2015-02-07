@@ -1,5 +1,6 @@
 import DroneData
 import droneNetClass
+import simDataCapture
 import io
 import simpycam
 import os
@@ -9,12 +10,10 @@ filename = os.path.dirname(__file__) + '\\img\\test.jpg'
 camera = simpycam.simpycam(filename)
 
 image = camera.capture()
-pose = (1, 2, 3, 4, 5, 6)
-time = 5
-sysTime = 6
+
+mavData = simDataCapture.simDataCapture()
 
 data = DroneData.DroneData()
-data.load(pose, time, sysTime, image)
 
 data.gpsTime = 10
 
@@ -28,3 +27,14 @@ data2.deserialize(stream)
 with io.open('data2img.jpg', 'wb') as file:
     file.write(data2.image)
 
+#file io testing
+a = "this is a test for write."
+b = "cantalope"
+with io.open('testfile.txt', 'wb') as file:
+    file.writelines(a)
+    file.close()
+
+with io.open('testfile.txt', 'ab') as file:
+    file.writelines(b)
+    file.close()
+    

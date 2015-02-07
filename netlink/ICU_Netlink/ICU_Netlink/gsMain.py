@@ -22,6 +22,7 @@ network = gsNetClass.gsNetClass()
 
 while True:
     if network.numData() > 0:
+        print "data in net queue"
         data = network.getData()
         pickledData = data[0] #this should be a pickled DroneData object
 
