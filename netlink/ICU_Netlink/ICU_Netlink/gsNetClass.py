@@ -33,7 +33,7 @@ class gsNetClass(object):
         while connected:
             try:
                 #this should be a drone data object
-                data = tcpListenSocket.recv(2048)
+                data = tcpListenSocket.recv(2097152) #2048
                 print "recived data from drone:" + address[0]
                 self.droneDataQueue.append((data, address[0]))
             except:
