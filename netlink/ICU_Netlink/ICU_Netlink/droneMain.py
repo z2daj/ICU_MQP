@@ -1,4 +1,6 @@
 import droneNetClass
+from DroneData import DroneData
+from imageCapture import imageCapture
 from simDataCapture import simDataCapture
 import io
 import os
@@ -14,6 +16,14 @@ network = droneNetClass.droneNetClass()
 
 dataCapture = simDataCapture()
 
+#setup the image capture thread.
+cameraPath = os.path.dirname(__file__) 
+if os.name == 'nt':#use windows style
+    cameraPath = cameraPath + '\\img\\test.jpg'
+else:#use unix style
+    cameraPath = cameraPath + '/img/test.jpg'
+capture = imageCapture(cameraPath)
+
 #send the data if network connected, save to disk otherwise
 def sendData(someData):
     if not network.send(data):
@@ -28,10 +38,19 @@ def sendData(someData):
 lastOldTime = 0
 while True:
     #add a new datapoint to the send queue
-    if len(dataCapture.samples):
-        dataPacket = str(dataCapture.getNextSample())
-        dataq.append(dataPacket)
-        print dataPacket
+    if len(dataCapture.samples) and capture.hasImage():
+        dd = DroneData()
+
+        timeImg = capture.getImage()
+        imuData = dataCapture.getClosestSample(timeImg[0])
+
+        dd.image = timeImg[1] #load the image
+        dd.pose = imuData[0]
+        dd.gpsTime = imuData[1]
+        dd.systemTime = imuData[2]
+
+        dataq.append(dd.serialize())
+        print "added packet at position:" + str(len(dataq))
     
     #send that data over the network / save to disk if no connection
     if len(dataq):
