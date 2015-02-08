@@ -52,7 +52,6 @@ class gsNetClass(object):
         if not raw_msglen:
             return None
         msglen = struct.unpack('>I', raw_msglen)[0]
-        print msglen
         # Read the message data
         return self.recvall(sock, msglen)
 
