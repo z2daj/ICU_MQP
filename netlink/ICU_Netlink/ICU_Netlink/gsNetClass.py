@@ -2,6 +2,7 @@ import sys
 from socket import *
 import threading
 import time
+import struct
 
 
 from collections import deque
@@ -12,11 +13,11 @@ class gsNetClass(object):
     GSListenPort = 5005
 
     udpListenSocket = socket(AF_INET, SOCK_DGRAM)
-    udpListenSocket.bind(('', GSListenPort)) #not sure what to do if the system says this is busy.
+    udpListenSocket.bind(('', GSListenPort))
 
     connectedDrones = []
 
-    #list of all the the drone that has been recived from ALL drones, but has not been processed yet.
+    #list of all the the dronedata that has been recived from ALL drones, but has not been processed yet.
     droneDataQueue = deque()
 
     def handleDroneConnection(self, address):
@@ -32,11 +33,11 @@ class gsNetClass(object):
 
         while connected:
             try:
-                #this should be a drone data object
-                data = tcpListenSocket.recv(2097152) #2048
-                print "recived data from drone:" + address[0]
+                data = self.recv_msg(tcpListenSocket) #.recv(2048)
+                #print "recived data from drone:" + address[0]
                 self.droneDataQueue.append((data, address[0]))
-            except:
+            except Exception,e: 
+                print str(e)
                 print "connection lost"
                 self.connectedDrones.remove(address)
                 connected = False
@@ -44,6 +45,26 @@ class gsNetClass(object):
                 if len(data) == 0:
                     connected = False
                     print "connection to " + address[0] + " has been terminated on the drone side."
+
+    def recv_msg(self, sock):
+        # Read message length and unpack it into an integer
+        raw_msglen = self.recvall(sock, 4)
+        if not raw_msglen:
+            return None
+        msglen = struct.unpack('>I', raw_msglen)[0]
+        print msglen
+        # Read the message data
+        return self.recvall(sock, msglen)
+
+    def recvall(self, sock, n):
+        # Helper function to recv n bytes or return None if EOF is hit
+        data = ''
+        while len(data) < n:
+            packet = sock.recv(n - len(data))
+            if not packet:
+                return None
+            data += packet
+        return data
 
     def udpListen(self):
         while True:
@@ -74,6 +95,3 @@ class gsNetClass(object):
 
     def numData(self):
         return len(self.droneDataQueue)
-
-    def getConnected(self):
-        return self.connectedDrones

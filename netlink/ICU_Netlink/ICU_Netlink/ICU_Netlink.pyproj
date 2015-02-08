@@ -46,6 +46,12 @@
     <Compile Include="imageCapture.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="netMsgRcvTest.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="netMsgTest.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="simDataCapture.py">
       <SubType>Code</SubType>
     </Compile>

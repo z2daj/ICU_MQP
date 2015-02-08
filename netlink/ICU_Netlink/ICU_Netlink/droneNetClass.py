@@ -1,5 +1,6 @@
 import sys
 import time
+import struct
 from socket import *
 
 class droneNetClass(object):
@@ -43,18 +44,20 @@ class droneNetClass(object):
             self.connection = conn
 
     #Given a connection, start sending data.
-    """takes a connection and serial data to send.
+    """takes serial data to send.
     return an error if connection is not valid.
     return 1 if data sent."""
     def send(self, data):
+        msg = struct.pack('>I', len(data)) + data
+        sent = 0
         try:
-            self.d.send(data)
-            #print "data sent"
+            sent = self.connection.send(msg)
+            #print str(sent) + " bytes send out of " + str(len(data)) + " delta=" + str(len(data)-sent)
             return 1
         except:
+            print "error sending, " + str(sent) + " bytes send out of " + str(len(data))
             self.gsConnected = False
             self.connect()
-            #print "send failed, retrying connection"
             return 0
 
     def close(self):
