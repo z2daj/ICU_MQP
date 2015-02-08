@@ -15,4 +15,4 @@ network = gsNetClass.gsNetClass()
 while True:
     if network.numData() > 0:
         data = network.getData()
-        print "data recived"
+        print "data recived at " + time.asctime()

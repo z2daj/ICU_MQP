@@ -48,7 +48,7 @@ class droneNetClass(object):
     return 1 if data sent."""
     def send(self, data):
         try:
-            self.connection.send(data)
+            self.d.send(data)
             #print "data sent"
             return 1
         except:

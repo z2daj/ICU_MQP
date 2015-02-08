@@ -17,7 +17,7 @@ network = droneNetClass.droneNetClass()
 dataCapture = simDataCapture()
 
 #setup the image capture thread.
-cameraPath = os.path.dirname(__file__) 
+cameraPath = os.path.dirname(os.path.realpath(__file__)) 
 if os.name == 'nt':#use windows style
     cameraPath = cameraPath + '\\img\\test.jpg'
 else:#use unix style
@@ -50,7 +50,7 @@ while True:
         dd.systemTime = imuData[2]
 
         dataq.append(dd.serialize())
-        print "added packet at position:" + str(len(dataq))
+        print "added packet at position:" + str(len(dataq)) + " at time:" + time.asctime()
     
     #send that data over the network / save to disk if no connection
     if len(dataq):
@@ -60,7 +60,7 @@ while True:
     if len(backlog) and network.gsConnected and (time.time()-lastOldTime) > 0.1:
         lastOldTime = time.time()
         filename = backlog.popleft()
-        #load the contents of the backlog into memory
+        #load the contents of the backlog into memory a 
         with io.open(filename, 'rb') as file:
             oldData = pickle.load(file)
         os.remove(filename)#delete the old file from disk

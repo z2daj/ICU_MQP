@@ -14,16 +14,22 @@ import pickle
 #    filename = filename + '/img/test.jpg'
 
 #setup the image capture thread.
-cameraPath = os.path.dirname(__file__) 
+cameraPath = os.path.dirname(os.path.realpath(__file__)) 
 if os.name == 'nt':#use windows style
     cameraPath = cameraPath + '\\img\\test.jpg'
 else:#use unix style
     cameraPath = cameraPath + '/img/test.jpg'
-capture = imageCapture.imageCapture(cameraPath)
 
+print cameraPath
+
+#capture = imageCapture.imageCapture(cameraPath)
+with io.open(cameraPath, 'rb') as file:
+    print file.read()
 
 #test file right and read.
 data = ("some data", 12, 123121.23123)
+
+print data
 
 with io.open("filename.txt", 'wb') as file:
     pickle.dump(data, file)
@@ -33,4 +39,5 @@ with io.open("filename.txt", 'rb') as file:
     newData = pickle.load(file)
     file.close()
 
+print newData
 print data == newData
