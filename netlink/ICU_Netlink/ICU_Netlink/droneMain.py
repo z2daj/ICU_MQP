@@ -60,7 +60,7 @@ while True:
     #if there is stuff in the backlog and the network is now connected, start
     #adding the backlog data to the send queue. Not that this could overload the
     #queue if the backlog gets too long.
-    if len(backlog) and network.gsConnected and (time.time()-lastOldTime) > 0.1:
+    if len(backlog) and network.gsConnected and (time.time()-lastOldTime) > 0.1 and len(dataq) < 5:
         lastOldTime = time.time()
         filename = backlog.popleft()
         #load the contents of the backlog into memory a 

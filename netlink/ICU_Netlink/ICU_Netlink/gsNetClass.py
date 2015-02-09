@@ -18,7 +18,8 @@ class gsNetClass(object):
     connectedDrones = []
 
     #list of all the the dronedata that has been recived from ALL drones, but has not been processed yet.
-    droneDataQueue = deque()
+    #The data is the queue is in the format (datastream, sourceIP)
+    droneDataQueue = deque() 
 
     def handleDroneConnection(self, address):
         try:
