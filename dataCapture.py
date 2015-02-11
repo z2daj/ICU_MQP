@@ -2,8 +2,11 @@
 import sys
 import os
 import socket
+import time
+import random as r
+import threading
 
-# import the pymavlink library and set up for use on APM
+# import the pymavlink library and set up for use on APM/LLC
 d = os.getcwd()
 d += '/mavlink/pymavlink'
 sys.path.append(d)
@@ -31,49 +34,50 @@ class dataCapture(object):
     mav = mavlinkv10.MAVLink(mavproxy_sock)
 
     def __init__(self):
-        pose = self.getData()[0]
-        time = self.getData()[1]
-
-        sample = pose, time
-        self.samples.append(sample)
-
-        print pose
-        print time
+        dataThread = threading.Thread(target=self.getData(), name='dataCap', args=())
+        print 'Spawning Data Capture Thread'
+        dataThread.start()
 
     def getData(self):
 
-        att = True
-        gps = True
-        data = []
+        while True:
+            att = True
+            gps = True
 
-        while att or gps:
+            while att or gps:
 
-            (data_from_mavproxy, address_of_mavproxy) = mavproxy_sock.recvfrom(1024)
+                (data_from_mavproxy, address_of_mavproxy) = mavproxy_sock.recvfrom(1024)
 
-            try:
-                decoded_message = self.mav.decode(data_from_mavproxy)
-            except mavlinkv10.MAVError:
-                pass
+                try:
+                    decoded_message = self.mav.decode(data_from_mavproxy)
+                except mavlinkv10.MAVError:
+                    pass
 
-            if decoded_message:
+                if decoded_message:
 
-                if decoded_message.get_msgId() == mavlinkv10.MAVLINK_MSG_ID_GPS_RAW_INT and gps:
-                    gps_time = decoded_message.time_usec
-                    lat = decoded_message.lat
-                    lon = decoded_message.lon
-                    alt = decoded_message.alt
-                    gps = False
+                    if decoded_message.get_msgId() == mavlinkv10.MAVLINK_MSG_ID_GPS_RAW_INT and gps:
+                        print 'GPS Message Received'
+                        gps_time = decoded_message.time_usec
+                        lat = decoded_message.lat
+                        lon = decoded_message.lon
+                        alt = decoded_message.alt
+                        gps = False
 
-                if decoded_message.get_msgId() == mavlinkv10.MAVLINK_MSG_ID_ATTITUDE and att:
-                    pitch = decoded_message.pitch
-                    roll = decoded_message.roll
-                    yaw = decoded_message.yaw
-                    att = False
+                    if decoded_message.get_msgId() == mavlinkv10.MAVLINK_MSG_ID_ATTITUDE and att:
+                        print 'Attitude Message Received'
+                        pitch = decoded_message.pitch
+                        roll = decoded_message.roll
+                        yaw = decoded_message.yaw
+                        att = False
 
-        pose = lat, lon, alt, pitch, roll, yaw
-        time = gps_time
+            sample = lat, lon, alt, pitch, roll, yaw, gps_time  # creates a pose sample and appends it to sample list
+            self.samples.append(sample)
+            time.sleep(r.random())
 
-        data.append(pose)
-        data.append(time)
+    def getNextSample(self):
+        return self.samples.pop()  # return a sample
 
-        return data
+    def getClosestSample(self, time):
+        sample = min(self.samples, key=lambda x: abs(x[2] - time))  # this should eventually trim data
+        self.samples.remove(sample)
+        return sample
