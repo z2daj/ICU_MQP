@@ -65,14 +65,13 @@ class dataCapture(object):
                     gps = False
 
                 if decoded_message.get_msgId() == mavlinkv10.MAVLINK_MSG_ID_ATTITUDE and att:
-                    time_since_boot = decoded_message.time_boot_ms
                     pitch = decoded_message.pitch
                     roll = decoded_message.roll
                     yaw = decoded_message.yaw
                     att = False
 
         pose = lat, lon, alt, pitch, roll, yaw
-        time = gps_time, time_since_boot
+        time = gps_time
 
         data.append(pose)
         data.append(time)
