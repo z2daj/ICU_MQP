@@ -1,51 +1,35 @@
-# This python script creates an images directory and will take pictures from
-# the PiCamera every 10sec and store them with timestamps in the images
-# directory
-
-import os
-import picamera
+import simpycam #replace this and all calls to it with picamera for testing on the pi.
 import time
+import threading
+from collections import deque
 
-camera = picamera.PiCamera()
-cwd = os.getcwd()
-imgDir = cwd + '/images'
-runTime = 1000  # arbitrary capture time, should capture images for a minute
-sleepTime = 2  # sleep time for individual frame captures
+class imageCapture(object):
+    """this class spawns threads to handle the image capture from the picam.
+    The overall flow of this program is to capture images and load them into a queue.
+    The data from the queue can be retrived by the calling thread."""
 
-# calculate number of frames needed to fill allotted time and round to nearest integer
-FRAMES = int(runTime * sleepTime)
+    """encdodes data in the format of (time_as_float , image_as_ByteIO)"""
+    imageq = deque(maxlen = 10) #about 25MB of ram used for this...
 
-camera.resolution = (2592, 1944)
+    """"this should be run in its own thread."""
+    def captureToQ(self):
+        print "started capture"
+        camera = simpycam.simpycam(self.filename)
+        buf = camera.capture()
+        while True:#this module should run until shutdown by master.
+            time.sleep(0.75) #sleep for 3/4 of a second to simulate the picam
+            self.imageq.append((time.time(), buf))
+            #print "image added to queue at position:" + str(len(self.imageq))
 
-
-# capture images to a specified output path with the timestamp as the filename
-def captureImage(outputPath):
-    if os.path.exists(outputPath):
-        os.chdir(outputPath)
-        timeStr = time.strftime("%Y%m%d-%H%M%S")
-        camera.capture(timeStr + '.jpg')
-        print "Image captured with filename: " + timeStr + ".jpg"
-
-    else:
-        print "Output path: " + outputPath + "doesn't exist."
-
-# check to see if there is an existing output directory
-print 'Checking if /images exists...'
-
-if os.path.exists(imgDir):
-    print "It exists!"
-
-else:
-    print "It doesn't exist, creating directory"
-
-    os.makedirs(imgDir)
+    def getImage(self):
+        """returns a (time_as_float , image_as_ByteIO) tuple"""
+        return self.imageq.popleft()
     
-    print "Directory created."
+    def hasImage(self):
+        return len(self.imageq) > 0
 
-
-# captures images to imgDir
-for frame in range(FRAMES):
-    captureImage(imgDir)
-    time.sleep(sleepTime)
-
-print 'Done capturing images.'
+    def __init__(self, filename):
+        self.filename = filename
+        print "starting capture thread"
+        captureThread = threading.Thread(target=self.captureToQ, name="imageCaptureThread", args=())
+        captureThread.start()
