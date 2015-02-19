@@ -38,6 +38,7 @@ def handleDroneConnection(address):
         if len(data) == 0:
             connected = False
             print "connection to " + address[0] + " has been terminated on the drone side."
+        time.sleep(0.05)
 
 def udpListen():
     while True:
@@ -54,6 +55,7 @@ def udpListen():
             t.start()
             print "spawning new thread to handle drone data."
         print "udp loop."
+        time.sleep(0.1)
 
 udpThread = threading.Thread(target=udpListen, name="udpListener", args=())
 print "starting the UDP listener."

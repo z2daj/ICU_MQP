@@ -9,15 +9,17 @@ class DroneData(object):
         self.pose = ()
         self.gpsTime = 0
         self.systemTime = 0
-        self.image = io.BytesIO()
+        self.image = None
 
     def load(self, pose, gpsTime, sysTime, image_buffer):
         self.pose = pose
         self.gpsTime = gpsTime
         self.systemTime = sysTime
         self.image = image_buffer
+        print "loaded data into dd object."
 
     def serialize(self):
+        print "returning serial stream from dronedata"
         return pickle.dumps(self)
 
     """Sets all of the fields of the class equal to the """

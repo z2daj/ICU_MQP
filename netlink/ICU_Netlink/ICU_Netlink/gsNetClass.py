@@ -46,6 +46,7 @@ class gsNetClass(object):
                 if len(data) == 0:
                     connected = False
                     print "connection to " + address[0] + " has been terminated on the drone side."
+            time.sleep(0.1)
 
     def recv_msg(self, sock):
         # Read message length and unpack it into an integer

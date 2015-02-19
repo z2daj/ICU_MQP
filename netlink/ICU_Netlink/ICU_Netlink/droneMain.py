@@ -16,13 +16,7 @@ network = droneNetClass.droneNetClass()
 
 dataCapture = simDataCapture()
 
-#setup the image capture thread.
-cameraPath = os.path.dirname(os.path.realpath(__file__)) 
-if os.name == 'nt':#use windows style
-    cameraPath = cameraPath + '\\img\\test.jpg'
-else:#use unix style
-    cameraPath = cameraPath + '/img/test.jpg'
-capture = imageCapture(cameraPath)
+capture = imageCapture()
 
 #send the data if network connected, save to disk otherwise
 def sendData(someData):
@@ -31,7 +25,9 @@ def sendData(someData):
         filename = str(time.time()) + ".dronedata"
         with io.open(filename, 'wb') as file:
             pickle.dump(someData, file)
+            file.close()
         backlog.append(filename)
+        print "added image to backlog at postion: " + str(len(backlog))
 
 #now that we have that out of the way, we can start working
 #on the main program loop.
@@ -66,5 +62,7 @@ while True:
         #load the contents of the backlog into memory a 
         with io.open(filename, 'rb') as file:
             oldData = pickle.load(file)
+            file.close()
         os.remove(filename)#delete the old file from disk
         dataq.append(oldData)
+    time.sleep(0.1)
