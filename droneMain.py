@@ -15,8 +15,8 @@ backlog = deque() #filename
 #setup the groundstation connection
 network = droneNetClass.droneNetClass()
 
-dataCapture = simDataCapture()
-# dataCapture = dataCapture()
+# dataCapture = simDataCapture()
+dataCapture = dataCapture()
 
 #setup the image capture thread.
 cameraPath = os.path.dirname(os.path.realpath(__file__)) 
