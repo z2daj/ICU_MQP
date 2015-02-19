@@ -10,7 +10,7 @@ from collections import deque
 class gsNetClass(object):
     """this is a class that packages the functions of the netlink program."""
     # Define the port that will be used by the GS for listing.
-    GSListenPort = 14550
+    GSListenPort = 5005
 
     udpListenSocket = socket(AF_INET, SOCK_DGRAM)
     udpListenSocket.bind(('', GSListenPort))
