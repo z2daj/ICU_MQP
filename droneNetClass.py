@@ -12,7 +12,7 @@ class droneNetClass(object):
     connection is made. This is bad."""
 
     #Define the port that the ground station will be listening on.
-    gsListenPort = 5005
+    gsListenPort = 14550
     gsConnected = False
     
     tcpServer = socket(AF_INET, SOCK_STREAM)

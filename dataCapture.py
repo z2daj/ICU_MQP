@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), '..
 
 # all the socket stuff I'm leaving out here for the time being, presumably this will be taken care of elsewhere
 HOST = ''
-mavproxy_port = 5005
+mavproxy_port = 14550
 address_of_mavproxy = (HOST, mavproxy_port)
 
 mavproxy_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

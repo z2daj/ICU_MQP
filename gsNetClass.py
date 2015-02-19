@@ -10,7 +10,7 @@ from collections import deque
 class gsNetClass(object):
     """this is a class that packages the functions of the netlink program."""
     # Define the port that will be used by the GS for listing.
-    GSListenPort = 5005
+    GSListenPort = 14550
 
     udpListenSocket = socket(AF_INET, SOCK_DGRAM)
     udpListenSocket.bind(('', GSListenPort))
@@ -37,7 +37,7 @@ class gsNetClass(object):
                 data = self.recv_msg(tcpListenSocket) #.recv(2048)
                 #print "recived data from drone:" + address[0]
                 self.droneDataQueue.append((data, address[0]))
-            except Exception,e: 
+            except Exception, e:
                 print str(e)
                 print "connection lost"
                 self.connectedDrones.remove(address)
@@ -70,8 +70,12 @@ class gsNetClass(object):
         while True:
             data, addr = self.udpListenSocket.recvfrom(1024) # buffer size is 1024 bytes. Note that this is a blocking operation.
         
-            #addr has the correct ip, but the wrong port so we use the port sent in the UDP message. 
-            address = (addr[0], int(data))
+            #addr has the correct ip, but the wrong port so we use the port sent in the UDP message.
+
+            try:
+                address = (addr[0], int(data))
+            except Exception as e:
+                print 'An error as occurred: ', e
     
             if address not in self.connectedDrones:
                 self.connectedDrones.append(address)
