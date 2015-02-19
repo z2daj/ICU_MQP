@@ -40,6 +40,8 @@ class dataCapture(object):
 
     def getData(self):
 
+        print 'Entering getData()'
+
         while True:
             att = True
             gps = True
@@ -70,6 +72,7 @@ class dataCapture(object):
                         yaw = decoded_message.yaw
                         att = False
 
+            print 'Data Collected.'
             sample = lat, lon, alt, pitch, roll, yaw, gps_time  # creates a pose sample and appends it to sample list
             self.samples.append(sample)
             time.sleep(r.random())
