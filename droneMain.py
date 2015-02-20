@@ -15,7 +15,7 @@ backlog = deque() #filename
 #setup the groundstation connection
 network = droneNetClass.droneNetClass()
 
-# dataCapture = dataCapture()
+dataCapture = dataCapture()
 
 capture = imageCapture()
 
