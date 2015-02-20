@@ -42,35 +42,34 @@ class dataCapture(object):
 
     def getData(self):
 
-        while True:
-            att = True
-            gps = True
+        att = True
+        gps = True
 
-            while att or gps:
+        while att or gps:
 
-                (data_from_mavproxy, address_of_mavproxy) = self.mavproxy_sock.recvfrom(1024)
+            (data_from_mavproxy, address_of_mavproxy) = self.mavproxy_sock.recvfrom(1024)
 
-                try:
-                    decoded_message = self.mav.decode(data_from_mavproxy)
-                except mavlinkv10.MAVError:
-                    pass
+            try:
+                decoded_message = self.mav.decode(data_from_mavproxy)
+            except mavlinkv10.MAVError:
+                pass
 
-                if decoded_message:
+            if decoded_message:
 
-                    if decoded_message.get_msgId() == mavlinkv10.MAVLINK_MSG_ID_GPS_RAW_INT and gps:
-                        # print 'GPS Message Received'
-                        gps_time = decoded_message.time_usec
-                        lat = decoded_message.lat
-                        lon = decoded_message.lon
-                        alt = decoded_message.alt
-                        gps = False
+                if decoded_message.get_msgId() == mavlinkv10.MAVLINK_MSG_ID_GPS_RAW_INT and gps:
+                    # print 'GPS Message Received'
+                    gps_time = decoded_message.time_usec
+                    lat = decoded_message.lat
+                    lon = decoded_message.lon
+                    alt = decoded_message.alt
+                    gps = False
 
-                    if decoded_message.get_msgId() == mavlinkv10.MAVLINK_MSG_ID_ATTITUDE and att:
-                        # print 'Attitude Message Received'
-                        pitch = decoded_message.pitch
-                        roll = decoded_message.roll
-                        yaw = decoded_message.yaw
-                        att = False
+                if decoded_message.get_msgId() == mavlinkv10.MAVLINK_MSG_ID_ATTITUDE and att:
+                    # print 'Attitude Message Received'
+                    pitch = decoded_message.pitch
+                    roll = decoded_message.roll
+                    yaw = decoded_message.yaw
+                    att = False
 
             print 'Data Collected.'
             sample = lat, lon, alt, pitch, roll, yaw, gps_time  # creates a pose sample and appends it to sample list
