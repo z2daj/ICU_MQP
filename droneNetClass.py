@@ -20,6 +20,7 @@ class droneNetClass(object):
 
     #function that starts the network services and sets up the connection to the GS
     def __init__(self):
+        print 'Initializing network connection...'
         #setup the TCP server
         self.tcpServer.bind(('', 0)) #allow the system to find the best network ip and socket
         self.tcpServer.listen(1)
