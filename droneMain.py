@@ -2,6 +2,7 @@ import droneNetClass
 from DroneData import DroneData
 from imageCapture import imageCapture
 from simDataCapture import simDataCapture
+from dataCapture import dataCapture
 import io
 import os
 import time
@@ -14,7 +15,7 @@ backlog = deque() #filename
 #setup the groundstation connection
 network = droneNetClass.droneNetClass()
 
-dataCapture = simDataCapture()
+dataCapture = dataCapture()
 
 capture = imageCapture()
 
