@@ -14,6 +14,7 @@ else:#use unix style
 network = gsNetClass.gsNetClass()
 
 maxbufsize = 0
+timeSinceLast = 0
 while True:
     if network.numData() > 0:
         (data, ip) = network.getData()
@@ -23,7 +24,9 @@ while True:
         print droneData.pose
 
         print "data recived from drone: " + ip
-        
+        print "time since last rx: " + str(time.time() - timeSinceLast)
+        timeSinceLast = time.time()
+
         if os.name == 'nt':
             dataFolder = saveFolder +  ip + '\\'
         else:
@@ -36,3 +39,5 @@ while True:
 
         with io.open(saveFile, 'wb') as file:
             file.writelines(droneData.image)
+    
+    time.sleep(0.1)

@@ -12,7 +12,7 @@ class droneNetClass(object):
     connection is made. This is bad."""
 
     #Define the port that the ground station will be listening on.
-    gsListenPort = 5005
+    gsListenPort = 5005 
     gsConnected = False
     
     tcpServer = socket(AF_INET, SOCK_STREAM)
@@ -36,7 +36,8 @@ class droneNetClass(object):
         self.udpSock.sendto(str(self.tcpIncomingSocket), ('<broadcast>', self.gsListenPort))
         try:
             conn, address = self.tcpServer.accept()
-        except:
+        except Exception as e:
+            print e
             print "no connection"
         else:
             self.gsConnected = True
@@ -50,14 +51,19 @@ class droneNetClass(object):
     def send(self, data):
         msg = struct.pack('>I', len(data)) + data
         sent = 0
+
+        if not self.gsConnected:
+            self.connect()
+
         try:
+            starttime = time.time()
             sent = self.connection.send(msg)
-            #print str(sent) + " bytes send out of " + str(len(data)) + " delta=" + str(len(data)-sent)
+            print str(sent) + " bytes sent in " + str(time.time()-starttime) + " seconds."
             return 1
-        except:
+        except Exception as e:
+            print e
             print "error sending, " + str(sent) + " bytes send out of " + str(len(data))
             self.gsConnected = False
-            self.connect()
             return 0
 
     def close(self):

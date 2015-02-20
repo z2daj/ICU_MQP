@@ -37,7 +37,7 @@ class gsNetClass(object):
                 data = self.recv_msg(tcpListenSocket) #.recv(2048)
                 #print "recived data from drone:" + address[0]
                 self.droneDataQueue.append((data, address[0]))
-            except Exception, e:
+            except Exception,e: 
                 print str(e)
                 print "connection lost"
                 self.connectedDrones.remove(address)
@@ -46,6 +46,7 @@ class gsNetClass(object):
                 if len(data) == 0:
                     connected = False
                     print "connection to " + address[0] + " has been terminated on the drone side."
+            time.sleep(0.1)
 
     def recv_msg(self, sock):
         # Read message length and unpack it into an integer
@@ -70,12 +71,8 @@ class gsNetClass(object):
         while True:
             data, addr = self.udpListenSocket.recvfrom(1024) # buffer size is 1024 bytes. Note that this is a blocking operation.
         
-            #addr has the correct ip, but the wrong port so we use the port sent in the UDP message.
-
-            try:
-                address = (addr[0], int(data))
-            except Exception as e:
-                print 'An error as occurred: ', e
+            #addr has the correct ip, but the wrong port so we use the port sent in the UDP message. 
+            address = (addr[0], int(data))
     
             if address not in self.connectedDrones:
                 self.connectedDrones.append(address)

@@ -11,7 +11,7 @@ class simpycam(object):
             with io.open(path, 'rb') as file:
                 self.buffer = file.read()
         except:
-            print "path: %s does not exist." % path
+            print "path: %s does not esist." % path
 
 
     """Capture returns a ByteIO object containing the contents"""
