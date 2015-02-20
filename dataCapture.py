@@ -77,7 +77,6 @@ class dataCapture(object):
             print 'Data Collected.'
             sample = lat, lon, alt, pitch, roll, yaw, gps_time  # creates a pose sample and appends it to sample list
             self.samples.append(sample)
-            time.sleep(r.random())
 
     def getNextSample(self):
         return self.samples.pop()  # return a sample
