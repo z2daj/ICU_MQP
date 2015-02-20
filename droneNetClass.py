@@ -14,7 +14,7 @@ class droneNetClass(object):
     #Define the port that the ground station will be listening on.
     gsListenPort = 5005 
     gsConnected = False
-    
+
     tcpServer = socket(AF_INET, SOCK_STREAM)
     udpSock = socket(AF_INET, SOCK_DGRAM)
 
@@ -33,6 +33,8 @@ class droneNetClass(object):
     
     #try to connect, return false if unable to do so. 
     def connect(self):
+
+        print 'inside droneNetClass.connect()'
         self.tcpServer.setblocking(0)
         self.udpSock.sendto(str(self.tcpIncomingSocket), ('<broadcast>', self.gsListenPort))
         try:
@@ -52,6 +54,8 @@ class droneNetClass(object):
     def send(self, data):
         msg = struct.pack('>I', len(data)) + data
         sent = 0
+
+        print 'inside droneNetClass.send(), gsConnected = ', self.gsConnected
 
         if not self.gsConnected:
             self.connect()
