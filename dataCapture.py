@@ -15,23 +15,24 @@ import mavlinkv10
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), '../../'))
 
-# all the socket stuff I'm leaving out here for the time being, presumably this will be taken care of elsewhere
-HOST = ''
-mavproxy_port = 5005
-address_of_mavproxy = (HOST, mavproxy_port)
-
-mavproxy_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-mavproxy_sock.bind(address_of_mavproxy)
-
 
 class dataCapture(object):
     '''This class captures pose data from MAVProxy and stores them in a buffer of samples
     '''
 
-    samples = []
 
-    # Create mavlink object
+    # all the socket stuff I'm leaving out here for the time being, presumably this will be taken care of elsewhere
+    HOST = ''
+    mavproxy_port = 5005
+    address_of_mavproxy = (HOST, mavproxy_port)
+
+    mavproxy_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    mavproxy_sock.bind(address_of_mavproxy)
+
+    # Create mavlink object and connect to socket
     mav = mavlinkv10.MAVLink(mavproxy_sock)
+
+    samples = []
 
     def __init__(self):
         print 'Spawning Data Capture Thread'
@@ -49,7 +50,7 @@ class dataCapture(object):
 
             while att or gps:
 
-                (data_from_mavproxy, address_of_mavproxy) = mavproxy_sock.recvfrom(1024)
+                (data_from_mavproxy, address_of_mavproxy) = self.mavproxy_sock.recvfrom(1024)
 
                 try:
                     decoded_message = self.mav.decode(data_from_mavproxy)
