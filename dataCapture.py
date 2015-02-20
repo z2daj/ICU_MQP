@@ -71,9 +71,9 @@ class dataCapture(object):
                     yaw = decoded_message.yaw
                     att = False
 
-            print 'Data Collected.'
-            sample = lat, lon, alt, pitch, roll, yaw, gps_time  # creates a pose sample and appends it to sample list
-            self.samples.append(sample)
+        print 'Data Collected.'
+        sample = lat, lon, alt, pitch, roll, yaw, gps_time  # creates a pose sample and appends it to sample list
+        self.samples.append(sample)
 
     def getNextSample(self):
         return self.samples.pop()  # return a sample
