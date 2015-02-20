@@ -20,7 +20,6 @@ class dataCapture(object):
     '''This class captures pose data from MAVProxy and stores them in a buffer of samples
     '''
 
-
     # all the socket stuff I'm leaving out here for the time being, presumably this will be taken care of elsewhere
     HOST = ''
     mavproxy_port = 14550

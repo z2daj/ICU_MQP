@@ -11,27 +11,27 @@ class droneNetClass(object):
     where it will lock the parent thread as the connect loop will not return until a 
     connection is made. This is bad."""
 
-    #Define the port that the ground station will be listening on.
+    # Define the port that the ground station will be listening on.
     gsListenPort = 5005 
     gsConnected = False
 
     tcpServer = socket(AF_INET, SOCK_STREAM)
     udpSock = socket(AF_INET, SOCK_DGRAM)
 
-    #function that starts the network services and sets up the connection to the GS
+    # function that starts the network services and sets up the connection to the GS
     def __init__(self):
         print 'Initializing network connection...'
-        #setup the TCP server
-        self.tcpServer.bind(('', 0)) #allow the system to find the best network ip and socket
+        # setup the TCP server
+        self.tcpServer.bind(('', 0))  # allow the system to find the best network ip and socket
         self.tcpServer.listen(1)
 
         self.tcpIncomingSocket = self.tcpServer.getsockname()[1]
 
-        #start the UDP broadcast
+        # start the UDP broadcast
         self.udpSock.bind(('', 0))
         self.udpSock.setsockopt(SOL_SOCKET, SO_BROADCAST, 1)
     
-    #try to connect, return false if unable to do so. 
+    # try to connect, return false if unable to do so.
     def connect(self):
 
         print 'inside droneNetClass.connect()'
@@ -47,7 +47,7 @@ class droneNetClass(object):
             print "Connected to GS at:" + address[0]
             self.connection = conn
 
-    #Given a connection, start sending data.
+    # Given a connection, start sending data.
     """takes serial data to send.
     return an error if connection is not valid.
     return 1 if data sent."""
