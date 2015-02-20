@@ -15,17 +15,18 @@ import mavlinkv10
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), '../../'))
 
+# all the socket stuff I'm leaving out here for the time being, presumably this will be taken care of elsewhere
+HOST = ''
+mavproxy_port = 5005
+address_of_mavproxy = (HOST, mavproxy_port)
+
+mavproxy_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+mavproxy_sock.bind(address_of_mavproxy)
+
+
 class dataCapture(object):
     '''This class captures pose data from MAVProxy and stores them in a buffer of samples
     '''
-
-    # all the socket stuff I'm leaving out here for the time being, presumably this will be taken care of elsewhere
-    HOST = ''
-    mavproxy_port = 5005
-    address_of_mavproxy = (HOST, mavproxy_port)
-
-    mavproxy_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    mavproxy_sock.bind(address_of_mavproxy)
 
     samples = []
 
