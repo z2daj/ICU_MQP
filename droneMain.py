@@ -35,6 +35,11 @@ def sendData(someData):
 lastOldTime = 0
 while True:
     #add a new datapoint to the send queue
+
+    print 'here'
+    print len(dataCapture.samples)
+    print capture.hasImage()
+
     if len(dataCapture.samples) and capture.hasImage():
         dd = DroneData()
 
