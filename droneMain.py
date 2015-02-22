@@ -36,9 +36,9 @@ lastOldTime = 0
 while True:
     # add a new datapoint to the send queue
 
-    print 'here, len(dataCapture.samples), capture.hasImage()', len(dataCapture.samples), capture.hasImage()
+    print 'here, len(dataCapture.samples), capture.hasImage()', len(dataCapture.sampleQ), capture.hasImage()
 
-    if len(dataCapture.samples) and capture.hasImage():
+    if len(dataCapture.sampleQ) and capture.hasImage():
         dd = DroneData()
 
         timeImg = capture.getImage()
