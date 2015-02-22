@@ -3,8 +3,8 @@ import sys
 import os
 import socket
 import time
-import random as r
 import threading
+from collections import deque
 
 # import the pymavlink library and set up for use on APM/LLC
 d = os.getcwd()
@@ -20,7 +20,7 @@ class dataCapture(object):
     '''This class captures pose data from MAVProxy and stores them in a buffer of samples
     '''
 
-    # all the socket stuff I'm leaving out here for the time being, presumably this will be taken care of elsewhere
+    # connect to mavproxy out-port for message access
     HOST = ''
     mavproxy_port = 14550
     address_of_mavproxy = (HOST, mavproxy_port)
@@ -31,7 +31,7 @@ class dataCapture(object):
     # Create mavlink object and connect to socket
     mav = mavlinkv10.MAVLink(mavproxy_sock)
 
-    samples = []
+    sampleQ = deque()  # store samples into queue, should probably limit size so memory doesn't blow up
 
     def __init__(self):
         print 'Spawning Data Capture Thread'
@@ -74,13 +74,15 @@ class dataCapture(object):
 
             print 'Data Collected.'
             sample = lat, lon, alt, pitch, roll, yaw, gps_time  # creates a pose sample and appends it to sample list
-            self.samples.append(sample)
-            time.sleep(0.25)  # sleep for 250ms
+
+            self.sampleQ.append(sample)
+
+            time.sleep(0.1)  # sleep for 100ms
 
     def getNextSample(self):
-        return self.samples.pop()  # return a sample
+        return self.sampleQ.pop()  # return a sample
 
     def getClosestSample(self, time):
-        sample = min(self.samples, key=lambda x: abs(x[2] - time))  # this should eventually trim data
-        self.samples.remove(sample)
+        sample = min(self.sampleQ, key=lambda x: abs(x[2] - time))  # this should eventually trim data
+        self.sampleQ.remove(sample)
         return sample
