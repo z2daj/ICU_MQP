@@ -41,7 +41,7 @@ class dataCapture(object):
 
     def getData(self):
 
-        while True:
+        #while True:
 
             att = True
             gps = True
@@ -76,6 +76,7 @@ class dataCapture(object):
             sample = lat, lon, alt, pitch, roll, yaw, gps_time  # creates a pose sample and appends it to sample list
 
             self.sampleQ.append(sample)
+            print self.sampleQ.__len__()
 
             time.sleep(0.1)  # sleep for 100ms
 
