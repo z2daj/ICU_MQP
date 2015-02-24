@@ -31,7 +31,7 @@ class dataCapture(object):
     # Create mavlink object and connect to socket
     mav = mavlinkv10.MAVLink(mavproxy_sock)
 
-    sampleQ = deque()  # store samples into queue, should probably limit size so memory doesn't blow up
+    sampleQ = deque(15)  # store last 15 samples in queue, if maxlen is exceeded, deque removes old samples from left
 
     def __init__(self):
         print 'Spawning Data Capture Thread'
