@@ -36,12 +36,12 @@ class dataCapture(object):
     def __init__(self):
         print 'Spawning Data Capture Thread'
 
-        dataThread = threading.Thread(target=self.getData(), name='dataCap', args=())
+        dataThread = threading.Thread(target=self.getData, name='dataCap', args=())
         dataThread.start()
 
     def getData(self):
 
-        #while True:
+        while True:
 
             att = True
             gps = True
