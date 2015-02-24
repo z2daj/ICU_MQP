@@ -21,14 +21,14 @@ while True:
         droneData = DroneData.DroneData()
         
         droneData.deserialize(data)
-        print droneData.pose
+        print 'pose: ', droneData.pose
 
         print "data recived from drone: " + ip
         print "time since last rx: " + str(time.time() - timeSinceLast)
         timeSinceLast = time.time()
 
         if os.name == 'nt':
-            dataFolder = saveFolder +  ip + '\\'
+            dataFolder = saveFolder + ip + '\\'
         else:
             dataFolder = saveFolder + ip + '/'
 

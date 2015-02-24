@@ -3,6 +3,7 @@ import time
 import struct
 from socket import *
 
+
 class droneNetClass(object):
     """This class provides functions for interacting with the ICU network. 
     It should be run as it's own thread.

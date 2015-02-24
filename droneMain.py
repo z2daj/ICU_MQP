@@ -44,6 +44,8 @@ while True:
         timeImg = capture.getImage()
         imuData = dataCapture.getClosestSample(timeImg[0])
 
+        print 'imuData: ', imuData
+
         dd.image = timeImg[1]
         dd.pose = imuData[0]
         dd.gpsTime = imuData[1]

@@ -69,9 +69,9 @@ class gsNetClass(object):
 
     def udpListen(self):
         while True:
-            data, addr = self.udpListenSocket.recvfrom(1024) # buffer size is 1024 bytes. Note that this is a blocking operation.
+            data, addr = self.udpListenSocket.recvfrom(1024)  # buffer size is 1024 bytes. Note that this is a blocking operation.
         
-            #addr has the correct ip, but the wrong port so we use the port sent in the UDP message. 
+            # addr has the correct ip, but the wrong port so we use the port sent in the UDP message.
             address = (addr[0], int(data))
     
             if address not in self.connectedDrones:

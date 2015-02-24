@@ -3,6 +3,8 @@ import cPickle as pickle
 
 """This class packages the IMU and image data for 
 sending from the drone to the ground station."""
+
+
 class DroneData(object):
 
     def __init__(self):
