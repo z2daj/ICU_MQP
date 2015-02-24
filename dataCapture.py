@@ -72,11 +72,11 @@ class dataCapture(object):
                         yaw = decoded_message.yaw
                         att = False
 
-            print 'Data Collected.'
+            print 'Storing Pose...'
             sample = lat, lon, alt, pitch, roll, yaw, gps_time  # creates a pose sample and appends it to sample list
 
             self.sampleQ.append(sample)
-            print self.sampleQ.__len__()
+            # print self.sampleQ.__len__()
 
             time.sleep(0.1)  # sleep for 100ms
 
