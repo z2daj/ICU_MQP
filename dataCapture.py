@@ -52,8 +52,9 @@ class dataCapture(object):
 
                 try:
                     decoded_message = self.mav.decode(data_from_mavproxy)
-                except mavlinkv10.MAVError as e:
-                    print 'Error: ', e
+                except mavlinkv10.MAVError:
+                    # print 'Error: ', e
+                    break
 
                 if decoded_message:
 
