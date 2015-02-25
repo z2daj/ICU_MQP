@@ -31,7 +31,7 @@ class dataCapture(object):
     # Create mavlink object and connect to socket
     mav = mavlinkv10.MAVLink(mavproxy_sock)
 
-    sampleQ = deque(maxlen=15)  # store last 15 samples , if maxlen is exceeded, deque removes old samples from left
+    sampleQ = deque(maxlen=100)  # store last 100 samples , if maxlen is exceeded, deque removes old samples from left
 
     def __init__(self):
         print 'Spawning Data Capture Thread'
@@ -71,6 +71,19 @@ class dataCapture(object):
                         pitch = decoded_message.pitch
                         roll = decoded_message.roll
                         yaw = decoded_message.yaw
+                        att = False
+
+                if not decoded_message:
+                    if gps:
+                        gps_time = 7
+                        lat = 7
+                        lon = 7
+                        alt = 7
+                        gps = False
+                    if att:
+                        pitch = 7
+                        roll = 7
+                        yaw = 7
                         att = False
 
             print 'Storing Pose...'
