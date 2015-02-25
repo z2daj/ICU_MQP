@@ -54,6 +54,30 @@ class dataCapture(object):
 
                 if not self.debug:
                     (data_from_mavproxy, address_of_mavproxy) = self.mavproxy_sock.recvfrom(1024)
+
+                    try:
+                        decoded_message = self.mav.decode(data_from_mavproxy)
+                    except mavlinkv10.MAVError as e:
+                        # print 'Error: ', e
+                        break
+
+                    if decoded_message:
+
+                        if decoded_message.get_msgId() == mavlinkv10.MAVLINK_MSG_ID_GPS_RAW_INT and gps:
+                            # print 'GPS Message Received'
+                            gps_time = decoded_message.time_usec
+                            lat = decoded_message.lat
+                            lon = decoded_message.lon
+                            alt = decoded_message.alt
+                            gps = False
+
+                        if decoded_message.get_msgId() == mavlinkv10.MAVLINK_MSG_ID_ATTITUDE and att:
+                            # print 'Attitude Message Received'
+                            pitch = decoded_message.pitch
+                            roll = decoded_message.roll
+                            yaw = decoded_message.yaw
+                            att = False
+
                 else:
                     if gps:
                         gps_time = 7
@@ -65,29 +89,6 @@ class dataCapture(object):
                         pitch = 7
                         roll = 7
                         yaw = 7
-                        att = False
-
-                try:
-                    decoded_message = self.mav.decode(data_from_mavproxy)
-                except mavlinkv10.MAVError as e:
-                    # print 'Error: ', e
-                    break
-
-                if decoded_message:
-
-                    if decoded_message.get_msgId() == mavlinkv10.MAVLINK_MSG_ID_GPS_RAW_INT and gps:
-                        # print 'GPS Message Received'
-                        gps_time = decoded_message.time_usec
-                        lat = decoded_message.lat
-                        lon = decoded_message.lon
-                        alt = decoded_message.alt
-                        gps = False
-
-                    if decoded_message.get_msgId() == mavlinkv10.MAVLINK_MSG_ID_ATTITUDE and att:
-                        # print 'Attitude Message Received'
-                        pitch = decoded_message.pitch
-                        roll = decoded_message.roll
-                        yaw = decoded_message.yaw
                         att = False
 
             print 'Storing Pose...'
