@@ -33,7 +33,11 @@ class dataCapture(object):
 
     sampleQ = deque(maxlen=100)  # store last 100 samples , if maxlen is exceeded, deque removes old samples from left
 
-    def __init__(self):
+    debug = False  # allow for no APM connection over USB, fill pose information with default data
+
+    def __init__(self, debug):
+
+        self.debug = debug
         print 'Spawning Data Capture Thread'
 
         dataThread = threading.Thread(target=self.getData, name='dataCap', args=())
@@ -48,12 +52,26 @@ class dataCapture(object):
 
             while att or gps:
 
-                (data_from_mavproxy, address_of_mavproxy) = self.mavproxy_sock.recvfrom(1024)
+                if not self.debug:
+                    (data_from_mavproxy, address_of_mavproxy) = self.mavproxy_sock.recvfrom(1024)
+                else:
+                    if not decoded_message:
+                        if gps:
+                            gps_time = 7
+                            lat = 7
+                            lon = 7
+                            alt = 7
+                            gps = False
+                        if att:
+                            pitch = 7
+                            roll = 7
+                            yaw = 7
+                            att = False
 
                 try:
                     decoded_message = self.mav.decode(data_from_mavproxy)
                 except mavlinkv10.MAVError as e:
-                    print 'Error: ', e
+                    # print 'Error: ', e
                     break
 
                 if decoded_message:
@@ -71,19 +89,6 @@ class dataCapture(object):
                         pitch = decoded_message.pitch
                         roll = decoded_message.roll
                         yaw = decoded_message.yaw
-                        att = False
-
-                if not decoded_message:
-                    if gps:
-                        gps_time = 7
-                        lat = 7
-                        lon = 7
-                        alt = 7
-                        gps = False
-                    if att:
-                        pitch = 7
-                        roll = 7
-                        yaw = 7
                         att = False
 
             print 'Storing Pose...'

@@ -15,7 +15,7 @@ backlog = deque()  # filename
 # setup the groundstation connection
 network = droneNetClass.droneNetClass()
 
-dataCapture = dataCapture()
+dataCapture = dataCapture(True)  # set debug flag for use without APM attached to Pi
 
 capture = imageCapture()
 
