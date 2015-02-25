@@ -55,18 +55,17 @@ class dataCapture(object):
                 if not self.debug:
                     (data_from_mavproxy, address_of_mavproxy) = self.mavproxy_sock.recvfrom(1024)
                 else:
-                    if not decoded_message:
-                        if gps:
-                            gps_time = 7
-                            lat = 7
-                            lon = 7
-                            alt = 7
-                            gps = False
-                        if att:
-                            pitch = 7
-                            roll = 7
-                            yaw = 7
-                            att = False
+                    if gps:
+                        gps_time = 7
+                        lat = 7
+                        lon = 7
+                        alt = 7
+                        gps = False
+                    if att:
+                        pitch = 7
+                        roll = 7
+                        yaw = 7
+                        att = False
 
                 try:
                     decoded_message = self.mav.decode(data_from_mavproxy)
