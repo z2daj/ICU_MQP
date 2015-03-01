@@ -13,6 +13,7 @@ class simDataCapture(object):
 
     def getData(self):
         while True:
+            #lat, lon, alt, pitch, roll, yaw
             pose = (r.randint(-128, 128), r.randint(-128, 128), r.randint(-128, 128), r.randint(-128, 128), r.randint(-128, 128), r.randint(-128, 128))
             gpsTime = time.time()
             sysTime = time.time()

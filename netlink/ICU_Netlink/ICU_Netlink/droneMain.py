@@ -1,7 +1,8 @@
-import droneNetClass
+from droneNetClass import droneNetClass
 from DroneData import DroneData
 from imageCapture import imageCapture
 from simDataCapture import simDataCapture
+#from dataCapture import dataCapture as dataCaptureClass
 import io
 import os
 import time
@@ -12,8 +13,9 @@ dataq = deque() #dataStreams
 backlog = deque() #filenames
 
 #setup the groundstation connection
-network = droneNetClass.droneNetClass()
+network = droneNetClass()
 
+#dataCapture = dataCaptureClass(True)
 dataCapture = simDataCapture()
 
 capture = imageCapture()
@@ -49,6 +51,8 @@ def main():
 
             timeImg = capture.getImage()
             imuData = dataCapture.getClosestSample(timeImg[0])
+
+            print "image data time delta = " + str(timeImg[0] - imuData[2])
 
             dd.image = timeImg[1]
             dd.pose = imuData[0]
