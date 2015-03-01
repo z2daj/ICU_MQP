@@ -18,26 +18,26 @@ timeSinceLast = 0
 while True:
     if network.numData() > 0:
         (data, ip) = network.getData()
-        droneData = DroneData.DroneData()
-        
-        droneData.deserialize(data)
-        print droneData.pose
+        if data is not None:
+            droneData = DroneData.DroneData()
+            droneData.deserialize(data)
+            print droneData.pose
 
-        print "data recived from drone: " + ip
-        print "time since last rx: " + str(time.time() - timeSinceLast)
-        timeSinceLast = time.time()
+            print "data recived from drone: " + ip
+            print "time since last rx: " + str(time.time() - timeSinceLast)
+            timeSinceLast = time.time()
 
-        if os.name == 'nt':
-            dataFolder = saveFolder +  ip + '\\'
-        else:
-            dataFolder = saveFolder + ip + '/'
+            if os.name == 'nt':
+                dataFolder = saveFolder +  ip + '\\'
+            else:
+                dataFolder = saveFolder + ip + '/'
 
-        if not os.path.exists(dataFolder):
-            os.makedirs(dataFolder)
+            if not os.path.exists(dataFolder):
+                os.makedirs(dataFolder)
 
-        saveFile = dataFolder + str(time.time()) + '.jpg'
+            saveFile = dataFolder + str(time.time()) + '.jpg'
 
-        with io.open(saveFile, 'wb') as file:
-            file.writelines(droneData.image)
+            with io.open(saveFile, 'wb') as file:
+                file.writelines(droneData.image)
     
     time.sleep(0.1)

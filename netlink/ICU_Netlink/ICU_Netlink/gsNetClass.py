@@ -43,7 +43,7 @@ class gsNetClass(object):
                 self.connectedDrones.remove(address)
                 connected = False
             else:
-                if len(data) == 0:
+                if data is None or len(data) == 0:
                     connected = False
                     print "connection to " + address[0] + " has been terminated on the drone side."
             time.sleep(0.1)

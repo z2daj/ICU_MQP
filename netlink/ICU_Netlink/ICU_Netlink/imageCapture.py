@@ -13,7 +13,7 @@ class imageCapture(object):
     The data from the queue can be retrived by the calling thread."""
 
     """encdodes data in the format of (time_as_float , image_as_ByteIO.getvalue())"""
-    imageq = deque() #about 25MB of ram used for this...
+    imageq = deque()
     
     """"this should be run in its own thread."""
     def captureToQ(self):
@@ -21,12 +21,14 @@ class imageCapture(object):
         camera = picamera.PiCamera()
         camera.resolution = camera.MAX_RESOLUTION
         while True:#this module should run until shutdown by master.
-            buf = io.BytesIO()
-            with buf:
-                camera.capture(buf, format='jpeg')
-                self.imageq.append((time.time(), buf.getvalue()))
-                print "time/image added to img buffer at position:" + str(len(self.imageq))
-            time.sleep(0.1)
+            if len(self.imageq) < 30:
+                buf = io.BytesIO()
+                with buf:
+                    startTime = time.time()
+                    camera.capture(buf, format='jpeg')
+                    self.imageq.append((time.time(), buf.getvalue()))
+                    print "time/image added to img buffer at position:" + str(len(self.imageq)) + " in " + str(time.time() - startTime)
+            time.sleep(0.25)
 
     def getImage(self):
         """returns a (time_as_float , image_as_ByteIO) tuple"""

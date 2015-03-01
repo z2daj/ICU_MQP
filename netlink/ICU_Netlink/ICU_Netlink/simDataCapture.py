@@ -18,14 +18,23 @@ class simDataCapture(object):
             sysTime = time.time()
             sample = (pose, gpsTime, sysTime)
             self.samples.append(sample)
-            time.sleep(r.random())
+            time.sleep(0.1)
 
     def getNextSample(self):
         return self.samples.pop() #return a sample
 
+    #remove all of the data that came before the given sample.
+    def trimData(self, sample):
+        sampleTime = sample[2]
+        for s in self.samples:
+            if s[2] < sampleTime:
+                self.samples.remove(s)
+
+
     def getClosestSample(self, time):#this should eventually trim the data.
         sample = min(self.samples, key=lambda x:abs(x[2] - time))
         self.samples.remove(sample)
+        self.trimData(sample)
         return sample
 
     def __init__(self):

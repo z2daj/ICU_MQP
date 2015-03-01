@@ -19,7 +19,7 @@ class DroneData(object):
         print "loaded data into dd object."
 
     def serialize(self):
-        print "returning serial stream from dronedata"
+        #print "returning serial stream from dronedata"
         return pickle.dumps(self)
 
     """Sets all of the fields of the class equal to the """
