@@ -38,6 +38,7 @@ class dataCapture(object):
     def __init__(self, debug):
 
         self.debug = debug
+        self.armed = self.isArmed()
         print 'Spawning Data Capture Thread'
 
         dataThread = threading.Thread(target=self.getData, name='dataCap', args=())
@@ -45,7 +46,7 @@ class dataCapture(object):
 
     def getData(self):
 
-        while True:
+        while self.armed:
 
             att = True
             gps = True
@@ -61,22 +62,24 @@ class dataCapture(object):
                         # print 'Error: ', e
                         break
 
-                    if decoded_message:
+                    while att or gps:
+                        if decoded_message:
 
-                        if decoded_message.get_msgId() == mavlinkv10.MAVLINK_MSG_ID_GPS_RAW_INT and gps:
-                            # print 'GPS Message Received'
-                            gps_time = decoded_message.time_usec
-                            lat = decoded_message.lat
-                            lon = decoded_message.lon
-                            alt = decoded_message.alt
-                            gps = False
+                            if decoded_message.get_msgId() == mavlinkv10.MAVLINK_MSG_ID_GPS_RAW_INT and gps:
+                                # print 'GPS Message Received'
+                                gps_time = decoded_message.time_usec
+                                lat = decoded_message.lat
+                                lon = decoded_message.lon
+                                alt = decoded_message.alt
+                                gps = False
 
-                        if decoded_message.get_msgId() == mavlinkv10.MAVLINK_MSG_ID_ATTITUDE and att:
-                            # print 'Attitude Message Received'
-                            pitch = decoded_message.pitch
-                            roll = decoded_message.roll
-                            yaw = decoded_message.yaw
-                            att = False
+                            if decoded_message.get_msgId() == mavlinkv10.MAVLINK_MSG_ID_ATTITUDE and att:
+                                # print 'Attitude Message Received'
+                                pitch = decoded_message.pitch
+                                roll = decoded_message.roll
+                                yaw = decoded_message.yaw
+                                att = False
+
 
                 else:
                     if gps:
@@ -99,6 +102,23 @@ class dataCapture(object):
             # print len(self.sampleQ)
 
             time.sleep(0.01)  # sleep for 10ms
+
+    def isArmed(self):
+        receivedArmed = False
+
+        if not receivedArmed:
+            (data_from_mavproxy, address_of_mavproxy) = self.mavproxy_sock.recvfrom(1024)
+
+            try:
+                decoded_message = self.mav.decode(data_from_mavproxy)
+            except mavlinkv10.MAVError as e:
+                # print 'Error: ', e
+                break
+
+            if decoded_message.get_msgId() == 128:  # 128 => MAV_MODE_FLAG_SAFETY_ARMED message ID
+                receivedArmed = True
+
+        return receivedArmed
 
     def getNextSample(self):
         return self.sampleQ.pop()  # return a sample
